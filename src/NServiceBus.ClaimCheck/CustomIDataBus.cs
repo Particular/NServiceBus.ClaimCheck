@@ -1,7 +1,7 @@
 ﻿namespace NServiceBus.Features;
 
 using Microsoft.Extensions.DependencyInjection;
-using NServiceBus.ClaimCheck.DataBus;
+using NServiceBus.ClaimCheck;
 
 class CustomIDataBus : Feature
 {

@@ -1,10 +1,10 @@
-namespace NServiceBus.ClaimCheck.DataBus;
+namespace NServiceBus.ClaimCheck;
 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-using Utils.Reflection;
+using DataBus.Utils.Reflection;
 
 /// <summary>
 /// This class contains helper methods to extract and cache databus properties from messages.

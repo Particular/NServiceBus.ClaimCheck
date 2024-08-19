@@ -1,7 +1,8 @@
-﻿namespace NServiceBus.ClaimCheck.DataBus;
+﻿namespace NServiceBus;
 
 using System;
 using System.Collections.Generic;
+using ClaimCheck;
 using Configuration.AdvancedExtensibility;
 
 /// <summary>

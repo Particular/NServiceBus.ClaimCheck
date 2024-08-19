@@ -1,4 +1,4 @@
-namespace NServiceBus.ClaimCheck.DataBus;
+namespace NServiceBus.ClaimCheck;
 
 using System;
 

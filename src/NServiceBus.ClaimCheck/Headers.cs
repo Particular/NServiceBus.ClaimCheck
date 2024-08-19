@@ -1,4 +1,4 @@
-namespace NServiceBus.ClaimCheck.DataBus;
+namespace NServiceBus.ClaimCheck;
 
 /// <summary>
 /// Static class containing headers used by NServiceBus.ClaimCheck.DataBus.

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClaimCheck;
 using Microsoft.Extensions.DependencyInjection;
-using NServiceBus.ClaimCheck.DataBus;
 using Settings;
 
 /// <summary>

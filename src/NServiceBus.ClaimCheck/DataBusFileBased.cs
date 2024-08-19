@@ -2,7 +2,7 @@ namespace NServiceBus.Features;
 
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using NServiceBus.ClaimCheck.DataBus;
+using NServiceBus.ClaimCheck;
 
 class DataBusFileBased : Feature
 {
