@@ -73,7 +73,7 @@ public class When_using_custom_IDataBus
         }
     }
 
-    public class MyDataBus : IDataBus
+    public class MyDataBus : IClaimCheck
     {
         Context context;
         public MyDataBus(Context context)

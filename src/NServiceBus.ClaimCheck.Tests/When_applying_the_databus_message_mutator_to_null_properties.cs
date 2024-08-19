@@ -18,7 +18,7 @@ class When_applying_the_databus_message_mutator_to_null_properties
         };
 
         var serializer = new SystemJsonClaimCheckSerializer();
-        var sendBehavior = new DataBusSendBehavior(null, serializer, new ClaimCheckConventions());
+        var sendBehavior = new ClaimCheckSendBehavior(null, serializer, new ClaimCheckConventions());
 
         using (var stream = new MemoryStream())
         {

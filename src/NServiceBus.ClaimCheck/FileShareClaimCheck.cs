@@ -6,13 +6,13 @@ using Features;
 /// <summary>
 /// Base class for data bus definitions.
 /// </summary>
-public class FileShareDataBus : DataBusDefinition
+public class FileShareClaimCheck : ClaimCheckDefinition
 {
     /// <summary>
-    /// The feature to enable when this databus is selected.
+    /// The feature to enable when this claim check is selected.
     /// </summary>
     protected internal override Type ProvidedByFeature()
     {
-        return typeof(DataBusFileBased);
+        return typeof(ClaimCheckFileBased);
     }
 }

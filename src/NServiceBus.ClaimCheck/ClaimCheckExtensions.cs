@@ -9,8 +9,8 @@ using Settings;
 /// <summary>
 /// This class provides implementers of databus with an extension mechanism for custom settings via extension methods.
 /// </summary>
-/// <typeparam name="T">The databus definition eg <see cref="FileShareDataBus" />.</typeparam>
-public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : DataBusDefinition
+/// <typeparam name="T">The databus definition eg <see cref="FileShareClaimCheck" />.</typeparam>
+public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : ClaimCheckDefinition
 {
     /// <summary>
     /// Default constructor.
@@ -51,14 +51,14 @@ public class ClaimCheckExtensions : ExposeSettings
     {
         ArgumentNullException.ThrowIfNull(serializer);
 
-        var deserializers = this.GetSettings().Get<List<IClaimCheckSerializer>>(Features.DataBusFeature.AdditionalDataBusDeserializersKey);
+        var deserializers = this.GetSettings().Get<List<IClaimCheckSerializer>>(Features.ClaimCheckFeature.AdditionalDataBusDeserializersKey);
 
         if (deserializers.Any(d => d.ContentType == serializer.ContentType))
         {
             throw new ArgumentException($"Deserializer for content type  '{serializer.ContentType}' is already registered.");
         }
 
-        var mainSerializer = this.GetSettings().Get<IClaimCheckSerializer>(Features.DataBusFeature.DataBusSerializerKey);
+        var mainSerializer = this.GetSettings().Get<IClaimCheckSerializer>(Features.ClaimCheckFeature.DataBusSerializerKey);
 
         if (mainSerializer.ContentType == serializer.ContentType)
         {

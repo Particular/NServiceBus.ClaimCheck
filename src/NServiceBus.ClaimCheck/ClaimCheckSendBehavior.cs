@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Pipeline;
 using Transport;
 
-class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
+class ClaimCheckSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
 {
-    public DataBusSendBehavior(IDataBus databus, IClaimCheckSerializer serializer, ClaimCheckConventions conventions)
+    public ClaimCheckSendBehavior(IClaimCheck databus, IClaimCheckSerializer serializer, ClaimCheckConventions conventions)
     {
         this.conventions = conventions;
         dataBusSerializer = serializer;
@@ -72,7 +72,7 @@ class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingL
 
                 //we use the headers to in order to allow the infrastructure (eg. the gateway) to modify the actual key
                 context.Headers["NServiceBus.DataBus." + headerKey] = headerValue;
-                context.Headers[DataBusHeaders.DataBusConfigContentType] = dataBusSerializer.ContentType;
+                context.Headers[ClaimCheckHeaders.DataBusConfigContentType] = dataBusSerializer.ContentType;
             }
         }
 
@@ -80,16 +80,16 @@ class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingL
     }
 
     readonly ClaimCheckConventions conventions;
-    readonly IDataBus dataBus;
+    readonly IClaimCheck dataBus;
     readonly IClaimCheckSerializer dataBusSerializer;
 
     public class Registration : RegisterStep
     {
         public Registration(ClaimCheckConventions conventions, IClaimCheckSerializer serializer) : base(
             "DataBusSend",
-            typeof(DataBusSendBehavior),
+            typeof(ClaimCheckSendBehavior),
             "Saves the payload into the shared location",
-            b => new DataBusSendBehavior(b.GetRequiredService<IDataBus>(), serializer, conventions))
+            b => new ClaimCheckSendBehavior(b.GetRequiredService<IClaimCheck>(), serializer, conventions))
         {
             InsertAfter("MutateOutgoingMessages");
             InsertAfter("ApplyTimeToBeReceived");

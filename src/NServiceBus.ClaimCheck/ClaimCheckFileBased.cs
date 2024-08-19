@@ -4,11 +4,11 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.ClaimCheck;
 
-class DataBusFileBased : Feature
+class ClaimCheckFileBased : Feature
 {
-    public DataBusFileBased()
+    public ClaimCheckFileBased()
     {
-        DependsOn<DataBusFeature>();
+        DependsOn<ClaimCheckFeature>();
     }
 
     /// <summary>
@@ -20,8 +20,8 @@ class DataBusFileBased : Feature
         {
             throw new InvalidOperationException("Specify the basepath for FileShareDataBus, eg endpointConfiguration.UseDataBus<FileShareDataBus>().BasePath(\"c:\\databus\")");
         }
-        var dataBus = new FileShareDataBusImplementation(basePath);
+        var dataBus = new FileShareClaimCheckImplementation(basePath);
 
-        context.Services.AddSingleton(typeof(IDataBus), dataBus);
+        context.Services.AddSingleton(typeof(IClaimCheck), dataBus);
     }
 }

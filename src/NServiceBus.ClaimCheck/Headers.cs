@@ -3,7 +3,7 @@ namespace NServiceBus.ClaimCheck;
 /// <summary>
 /// Static class containing headers used by NServiceBus.ClaimCheck.DataBus.
 /// </summary>
-public static class DataBusHeaders
+public static class ClaimCheckHeaders
 {
     /// <summary>
     /// The content type used to serialize the data bus properties in the message.

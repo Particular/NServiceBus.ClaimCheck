@@ -44,7 +44,7 @@ public class When_sender_serializer_differ
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
 
-                builder.UseClaimCheck<FileShareDataBus, MyCustomSerializer>().BasePath(basePath);
+                builder.UseClaimCheck<FileShareClaimCheck, MyCustomSerializer>().BasePath(basePath);
 
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
             });
@@ -59,7 +59,7 @@ public class When_sender_serializer_differ
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
 
-                builder.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>()
+                builder.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>()
                     .BasePath(basePath)
                     .AddDeserializer<MyCustomSerializer>();
 

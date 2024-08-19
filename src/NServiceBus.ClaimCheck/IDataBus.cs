@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// The main interface for interactions with the databus.
 /// </summary>
-public interface IDataBus
+public interface IClaimCheck
 {
     /// <summary>
     /// Gets a data item from the bus.
@@ -27,7 +27,7 @@ public interface IDataBus
     Task<string> Put(Stream stream, TimeSpan timeToBeReceived, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Called when the bus starts up to allow the data bus to active background tasks.
+    /// Called when the bus starts up to allow the data bus to activate background tasks.
     /// </summary>
     Task Start(CancellationToken cancellationToken = default);
 }

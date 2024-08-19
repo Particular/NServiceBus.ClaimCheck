@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using NServiceBus.Logging;
 
-class DataBusDeserializer
+class ClaimCheckDeserializer
 {
-    public DataBusDeserializer(
+    public ClaimCheckDeserializer(
         IClaimCheckSerializer mainDeserializer,
         IReadOnlyCollection<IClaimCheckSerializer> additionalDeserializers)
     {
@@ -54,5 +54,5 @@ class DataBusDeserializer
 
     readonly Dictionary<string, IClaimCheckSerializer> deserializers;
 
-    static readonly ILog logger = LogManager.GetLogger<DataBusDeserializer>();
+    static readonly ILog logger = LogManager.GetLogger<ClaimCheckDeserializer>();
 }

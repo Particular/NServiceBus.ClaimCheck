@@ -16,12 +16,12 @@ public static class ConventionsBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(definesDataBusProperty);
 
-        var dataBusConventions = builder.GetSettings().GetOrDefault<ClaimCheckConventions>(Features.DataBusFeature.DataBusConventionsKey);
+        var dataBusConventions = builder.GetSettings().GetOrDefault<ClaimCheckConventions>(Features.ClaimCheckFeature.DataBusConventionsKey);
 
         if (dataBusConventions == null)
         {
             dataBusConventions = new ClaimCheckConventions();
-            builder.GetSettings().Set(Features.DataBusFeature.DataBusConventionsKey, dataBusConventions);
+            builder.GetSettings().Set(Features.ClaimCheckFeature.DataBusConventionsKey, dataBusConventions);
         }
 
         dataBusConventions.IsClaimCheckPropertyAction = definesDataBusProperty;

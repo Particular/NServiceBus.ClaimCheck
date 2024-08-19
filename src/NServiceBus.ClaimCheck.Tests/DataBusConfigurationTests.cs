@@ -16,18 +16,18 @@ public class DataBusConfigurationTests
     {
         var endpointConfiguration = new EndpointConfiguration("MyEndpoint");
 
-        endpointConfiguration.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>()
+        endpointConfiguration.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>()
             .AddDeserializer(new FakeDataBusSerializer("content-type-1"))
             .AddDeserializer(new FakeDataBusSerializer("content-type-2"));
 
-        Assert.That(endpointConfiguration.GetSettings().Get<List<IClaimCheckSerializer>>(NServiceBus.Features.DataBusFeature.AdditionalDataBusDeserializersKey).Count, Is.EqualTo(2));
+        Assert.That(endpointConfiguration.GetSettings().Get<List<IClaimCheckSerializer>>(NServiceBus.Features.ClaimCheckFeature.AdditionalDataBusDeserializersKey).Count, Is.EqualTo(2));
     }
 
     [Test]
     public void Should_not_allow_duplicate_deserializers()
     {
         var endpointConfiguration = new EndpointConfiguration("MyEndpoint");
-        var config = endpointConfiguration.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>()
+        var config = endpointConfiguration.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>()
             .AddDeserializer(new FakeDataBusSerializer("duplicate"));
 
         Assert.Throws<ArgumentException>(() => config.AddDeserializer(new FakeDataBusSerializer("duplicate")));
@@ -37,7 +37,7 @@ public class DataBusConfigurationTests
     public void Should_not_allow_duplicate_deserializer_with_same_content_type_as_main_serializer()
     {
         var endpointConfiguration = new EndpointConfiguration("MyEndpoint");
-        var config = endpointConfiguration.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>();
+        var config = endpointConfiguration.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>();
 
         Assert.Throws<ArgumentException>(() => config.AddDeserializer<SystemJsonClaimCheckSerializer>());
     }
@@ -50,7 +50,7 @@ public class DataBusConfigurationTests
         public void Serialize(object databusProperty, Stream stream) => throw new NotImplementedException();
     }
 
-    class MyDataBus : IDataBus
+    class MyDataBus : IClaimCheck
     {
         public Task<Stream> Get(string key, CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public Task<string> Put(Stream stream, TimeSpan timeToBeReceived, CancellationToken cancellationToken = default) => throw new NotImplementedException();

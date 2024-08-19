@@ -15,7 +15,7 @@ public static class UseClaimCheckExtensions
     /// </summary>
     /// <param name="config">The <see cref="EndpointConfiguration" /> instance to apply the settings to.</param>
     public static ClaimCheckExtensions<TDataBusDefinition> UseClaimCheck<TDataBusDefinition, TDataBusSerializer>(this EndpointConfiguration config)
-        where TDataBusDefinition : DataBusDefinition, new()
+        where TDataBusDefinition : ClaimCheckDefinition, new()
         where TDataBusSerializer : IClaimCheckSerializer, new()
     {
         ArgumentNullException.ThrowIfNull(config);
@@ -29,7 +29,7 @@ public static class UseClaimCheckExtensions
     /// <param name="config">The <see cref="EndpointConfiguration" /> instance to apply the settings to.</param>
     /// <param name="dataBusSerializer">The <see cref="IClaimCheckSerializer" /> instance to use.</param>
     public static ClaimCheckExtensions<TDataBusDefinition> UseClaimCheck<TDataBusDefinition>(this EndpointConfiguration config, IClaimCheckSerializer dataBusSerializer)
-        where TDataBusDefinition : DataBusDefinition, new()
+        where TDataBusDefinition : ClaimCheckDefinition, new()
     {
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(dataBusSerializer);
@@ -44,33 +44,33 @@ public static class UseClaimCheckExtensions
     }
 
     /// <summary>
-    /// Configures NServiceBus to use a custom <see cref="IDataBus" /> implementation.
+    /// Configures NServiceBus to use a custom <see cref="IClaimCheck" /> implementation.
     /// </summary>
     /// <param name="config">The <see cref="EndpointConfiguration" /> instance to apply the settings to.</param>
-    /// <param name="dataBusFactory">The factory to create the custom <see cref="IDataBus" /> to use.</param>
+    /// <param name="dataBusFactory">The factory to create the custom <see cref="IClaimCheck" /> to use.</param>
     /// <param name="dataBusSerializer">The <see cref="IClaimCheckSerializer" /> instance to use.</param>
-    public static ClaimCheckExtensions UseClaimCheck(this EndpointConfiguration config, Func<IServiceProvider, IDataBus> dataBusFactory, IClaimCheckSerializer dataBusSerializer)
+    public static ClaimCheckExtensions UseClaimCheck(this EndpointConfiguration config, Func<IServiceProvider, IClaimCheck> dataBusFactory, IClaimCheckSerializer dataBusSerializer)
     {
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(dataBusFactory);
         ArgumentNullException.ThrowIfNull(dataBusSerializer);
 
-        EnableDataBus(config, new CustomDataBus(dataBusFactory), dataBusSerializer);
+        EnableDataBus(config, new CustomClaimCheck(dataBusFactory), dataBusSerializer);
 
         return new ClaimCheckExtensions(config.GetSettings());
     }
 
-    static void EnableDataBus(EndpointConfiguration config, DataBusDefinition selectedDataBus, IClaimCheckSerializer dataBusSerializer)
+    static void EnableDataBus(EndpointConfiguration config, ClaimCheckDefinition selectedDataBus, IClaimCheckSerializer dataBusSerializer)
     {
-        config.GetSettings().Set(Features.DataBusFeature.SelectedDataBusKey, selectedDataBus);
-        config.GetSettings().Set(Features.DataBusFeature.DataBusSerializerKey, dataBusSerializer);
-        config.GetSettings().Set(Features.DataBusFeature.AdditionalDataBusDeserializersKey, new List<IClaimCheckSerializer>());
+        config.GetSettings().Set(Features.ClaimCheckFeature.SelectedDataBusKey, selectedDataBus);
+        config.GetSettings().Set(Features.ClaimCheckFeature.DataBusSerializerKey, dataBusSerializer);
+        config.GetSettings().Set(Features.ClaimCheckFeature.AdditionalDataBusDeserializersKey, new List<IClaimCheckSerializer>());
 
-        if (!config.GetSettings().HasSetting(Features.DataBusFeature.DataBusConventionsKey))
+        if (!config.GetSettings().HasSetting(Features.ClaimCheckFeature.DataBusConventionsKey))
         {
-            config.GetSettings().Set(Features.DataBusFeature.DataBusConventionsKey, new ClaimCheckConventions());
+            config.GetSettings().Set(Features.ClaimCheckFeature.DataBusConventionsKey, new ClaimCheckConventions());
         }
 
-        config.EnableFeature<Features.DataBusFeature>();
+        config.EnableFeature<Features.ClaimCheckFeature>();
     }
 }

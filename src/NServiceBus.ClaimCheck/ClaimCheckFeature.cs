@@ -12,16 +12,16 @@ using Settings;
 /// <summary>
 /// Used to configure the DataBus.
 /// </summary>
-public class DataBusFeature : Feature
+public class ClaimCheckFeature : Feature
 {
-    internal DataBusFeature()
+    internal ClaimCheckFeature()
     {
-        Defaults(s => s.EnableFeatureByDefault(GetSelectedFeatureForDataBus(s)));
+        Defaults(s => s.EnableFeatureByDefault(GetSelectedFeatureForClaimCheck(s)));
     }
 
-    static Type GetSelectedFeatureForDataBus(SettingsHolder settings)
+    static Type GetSelectedFeatureForClaimCheck(SettingsHolder settings)
     {
-        return settings.Get<DataBusDefinition>(SelectedDataBusKey)
+        return settings.Get<ClaimCheckDefinition>(SelectedDataBusKey)
             .ProvidedByFeature();
     }
 
@@ -39,13 +39,13 @@ public class DataBusFeature : Feature
         var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>(AdditionalDataBusDeserializersKey);
         var conventions = context.Settings.Get<ClaimCheckConventions>(DataBusConventionsKey);
 
-        context.RegisterStartupTask(b => new DataBusInitializer(b.GetRequiredService<IDataBus>()));
-        context.Pipeline.Register(new DataBusSendBehavior.Registration(conventions, serializer));
-        context.Pipeline.Register(new DataBusReceiveBehavior.Registration(b =>
+        context.RegisterStartupTask(b => new DataBusInitializer(b.GetRequiredService<IClaimCheck>()));
+        context.Pipeline.Register(new ClaimCheckSendBehavior.Registration(conventions, serializer));
+        context.Pipeline.Register(new ClaimCheckReceiveBehavior.Registration(b =>
         {
-            return new DataBusReceiveBehavior(
-                b.GetRequiredService<IDataBus>(),
-                new DataBusDeserializer(serializer, additionalDeserializers),
+            return new ClaimCheckReceiveBehavior(
+                b.GetRequiredService<IClaimCheck>(),
+                new ClaimCheckDeserializer(serializer, additionalDeserializers),
                 conventions);
         }));
     }
@@ -57,9 +57,9 @@ public class DataBusFeature : Feature
 
     class DataBusInitializer : FeatureStartupTask
     {
-        readonly IDataBus dataBus;
+        readonly IClaimCheck dataBus;
 
-        public DataBusInitializer(IDataBus dataBus)
+        public DataBusInitializer(IClaimCheck dataBus)
         {
             this.dataBus = dataBus;
         }

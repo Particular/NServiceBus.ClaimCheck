@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Defines a databus that can be used by NServiceBus.
 /// </summary>
-public abstract class DataBusDefinition
+public abstract class ClaimCheckDefinition
 {
     /// <summary>
     /// The feature to enable when this databus is selected.

@@ -46,7 +46,7 @@ public class When_sending_unobtrusive_databus_properties_with_xml_message_serial
                         .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MyMessageWithLargePayload).FullName), t => t.Name.Contains("Payload"));
 
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
-                builder.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>().BasePath(basePath);
+                builder.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>().BasePath(basePath);
                 builder.UseSerialization<XmlSerializer>();
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
             }).ExcludeType<MyMessageWithLargePayload>(); // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
@@ -63,7 +63,7 @@ public class When_sending_unobtrusive_databus_properties_with_xml_message_serial
                         .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MyMessageWithLargePayload).FullName), t => t.Name.Contains("Payload"));
 
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
-                builder.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>().BasePath(basePath);
+                builder.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>().BasePath(basePath);
                 builder.UseSerialization<XmlSerializer>();
                 builder.RegisterMessageMutator(new Mutator());
             });

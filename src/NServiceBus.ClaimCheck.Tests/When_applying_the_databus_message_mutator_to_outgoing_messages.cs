@@ -26,7 +26,7 @@ class When_applying_the_databus_message_mutator_to_outgoing_messages
 
         var fakeDatabus = new FakeDataBus();
 
-        var sendBehavior = new DataBusSendBehavior(fakeDatabus, new SystemJsonClaimCheckSerializer(), new ClaimCheckConventions());
+        var sendBehavior = new ClaimCheckSendBehavior(fakeDatabus, new SystemJsonClaimCheckSerializer(), new ClaimCheckConventions());
 
         await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
 
@@ -47,11 +47,11 @@ class When_applying_the_databus_message_mutator_to_outgoing_messages
         var fakeDatabus = new FakeDataBus();
         var serializer = new SystemJsonClaimCheckSerializer();
 
-        var sendBehavior = new DataBusSendBehavior(fakeDatabus, serializer, new ClaimCheckConventions());
+        var sendBehavior = new ClaimCheckSendBehavior(fakeDatabus, serializer, new ClaimCheckConventions());
 
         await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
 
-        Assert.That(context.Headers[DataBusHeaders.DataBusConfigContentType], Is.EqualTo(serializer.ContentType));
+        Assert.That(context.Headers[ClaimCheckHeaders.DataBusConfigContentType], Is.EqualTo(serializer.ContentType));
     }
 
     [Test]
@@ -69,14 +69,14 @@ class When_applying_the_databus_message_mutator_to_outgoing_messages
 
         var fakeDatabus = new FakeDataBus();
 
-        var sendBehavior = new DataBusSendBehavior(fakeDatabus, new SystemJsonClaimCheckSerializer(), new ClaimCheckConventions());
+        var sendBehavior = new ClaimCheckSendBehavior(fakeDatabus, new SystemJsonClaimCheckSerializer(), new ClaimCheckConventions());
 
         await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
 
         Assert.That(fakeDatabus.TTBRUsed, Is.EqualTo(TimeSpan.FromMinutes(1)));
     }
 
-    class FakeDataBus : IDataBus
+    class FakeDataBus : IClaimCheck
     {
         public Task<Stream> Get(string key, CancellationToken cancellationToken = default)
         {

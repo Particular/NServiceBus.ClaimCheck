@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Logging;
 
-class FileShareDataBusImplementation : IDataBus
+class FileShareClaimCheckImplementation : IClaimCheck
 {
     // to account for mixed platforms ie windows -> linux or linux -> windows
     internal class PathNormalizer
@@ -34,7 +34,7 @@ class FileShareDataBusImplementation : IDataBus
     }
 
 
-    public FileShareDataBusImplementation(string basePath)
+    public FileShareClaimCheckImplementation(string basePath)
     {
         this.basePath = basePath;
     }
@@ -95,5 +95,5 @@ class FileShareDataBusImplementation : IDataBus
     }
 
     readonly string basePath;
-    static readonly ILog logger = LogManager.GetLogger<FileShareDataBusImplementation>();
+    static readonly ILog logger = LogManager.GetLogger<FileShareClaimCheckImplementation>();
 }
