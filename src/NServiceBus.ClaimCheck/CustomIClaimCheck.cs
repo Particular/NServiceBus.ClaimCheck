@@ -12,11 +12,11 @@ class CustomIClaimCheck : Feature
 
     protected override void Setup(FeatureConfigurationContext context)
     {
-        var customDataBusDefinition = context.Settings.Get<ClaimCheckDefinition>(ClaimCheckFeature.SelectedDataBusKey) as CustomClaimCheck;
+        var customClaimCheckDefinition = context.Settings.Get<ClaimCheckDefinition>(ClaimCheckFeature.SelectedClaimCheckKey) as CustomClaimCheck;
 
-        if (customDataBusDefinition is not null)
+        if (customClaimCheckDefinition is not null)
         {
-            context.Services.AddSingleton(sp => customDataBusDefinition.ClaimCheckFactory(sp));
+            context.Services.AddSingleton(sp => customClaimCheckDefinition.ClaimCheckFactory(sp));
         }
     }
 }

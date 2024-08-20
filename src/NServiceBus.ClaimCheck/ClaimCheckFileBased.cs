@@ -16,12 +16,12 @@ class ClaimCheckFileBased : Feature
     /// </summary>
     protected override void Setup(FeatureConfigurationContext context)
     {
-        if (!context.Settings.TryGet("FileShareDataBusPath", out string basePath))
+        if (!context.Settings.TryGet("FileShareClaimCheckPath", out string basePath))
         {
-            throw new InvalidOperationException("Specify the basepath for FileShareDataBus, eg endpointConfiguration.UseDataBus<FileShareDataBus>().BasePath(\"c:\\databus\")");
+            throw new InvalidOperationException("Specify the basepath for FileShareClaimCheck, eg endpointConfiguration.UseClaimCheck<FileShareClaimCheck>().BasePath(\"c:\\claimcheck\")");
         }
-        var dataBus = new FileShareClaimCheckImplementation(basePath);
+        var claimCheck = new FileShareClaimCheckImplementation(basePath);
 
-        context.Services.AddSingleton(typeof(IClaimCheck), dataBus);
+        context.Services.AddSingleton(typeof(IClaimCheck), claimCheck);
     }
 }

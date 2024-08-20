@@ -7,9 +7,9 @@ using Configuration.AdvancedExtensibility;
 using Settings;
 
 /// <summary>
-/// This class provides implementers of databus with an extension mechanism for custom settings via extension methods.
+/// This class provides implementers of the claim check pattern with an extension mechanism for custom settings via extension methods.
 /// </summary>
-/// <typeparam name="T">The databus definition eg <see cref="FileShareClaimCheck" />.</typeparam>
+/// <typeparam name="T">The implementation of the claim check pattern definition eg <see cref="FileShareClaimCheck" />.</typeparam>
 public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : ClaimCheckDefinition
 {
     /// <summary>
@@ -22,7 +22,7 @@ public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : ClaimCheck
 }
 
 /// <summary>
-/// This class provides implementers of databus with an extension mechanism for custom settings via extension methods.
+/// This class provides implementers of the claim check pattern with an extension mechanism for custom settings via extension methods.
 /// </summary>
 public class ClaimCheckExtensions : ExposeSettings
 {
@@ -35,7 +35,7 @@ public class ClaimCheckExtensions : ExposeSettings
     }
 
     /// <summary>
-    /// Configures additional deserializers to be considered when processing data bus properties. Can be called multiple times.
+    /// Configures additional deserializers to be considered when processing claim check properties. Can be called multiple times.
     /// </summary>
     public ClaimCheckExtensions AddDeserializer<TSerializer>() where TSerializer : IClaimCheckSerializer, new()
     {
@@ -45,20 +45,20 @@ public class ClaimCheckExtensions : ExposeSettings
     }
 
     /// <summary>
-    /// Configures additional deserializers to be considered when processing data bus properties. Can be called multiple times.
+    /// Configures additional deserializers to be considered when processing claim check properties. Can be called multiple times.
     /// </summary>
     public ClaimCheckExtensions AddDeserializer<TSerializer>(TSerializer serializer) where TSerializer : IClaimCheckSerializer
     {
         ArgumentNullException.ThrowIfNull(serializer);
 
-        var deserializers = this.GetSettings().Get<List<IClaimCheckSerializer>>(Features.ClaimCheckFeature.AdditionalDataBusDeserializersKey);
+        var deserializers = this.GetSettings().Get<List<IClaimCheckSerializer>>(Features.ClaimCheckFeature.AdditionalClaimCheckDeserializersKey);
 
         if (deserializers.Any(d => d.ContentType == serializer.ContentType))
         {
-            throw new ArgumentException($"Deserializer for content type  '{serializer.ContentType}' is already registered.");
+            throw new ArgumentException($"Deserializer for content type '{serializer.ContentType}' is already registered.");
         }
 
-        var mainSerializer = this.GetSettings().Get<IClaimCheckSerializer>(Features.ClaimCheckFeature.DataBusSerializerKey);
+        var mainSerializer = this.GetSettings().Get<IClaimCheckSerializer>(Features.ClaimCheckFeature.ClaimCheckSerializerKey);
 
         if (mainSerializer.ContentType == serializer.ContentType)
         {

@@ -4,15 +4,15 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-using DataBus.Utils.Reflection;
+using Utils.Reflection;
 
 /// <summary>
-/// This class contains helper methods to extract and cache databus properties from messages.
+/// This class contains helper methods to extract and cache claim check properties from messages.
 /// </summary>
 public class ClaimCheckConventions
 {
     /// <summary>
-    /// Returns true if the given property should be send via the DataBus.
+    /// Returns true if the given property should be sent via the selected implementation of the claim check pattern.
     /// </summary>
     public bool IsClaimCheckProperty(PropertyInfo property)
     {
@@ -23,7 +23,7 @@ public class ClaimCheckConventions
         }
         catch (Exception ex)
         {
-            throw new Exception("Failed to evaluate DataBus Property convention. See inner exception for details.", ex);
+            throw new Exception("Failed to evaluate if the Property matches the provided claim check convention. See inner exception for details.", ex);
         }
     }
 

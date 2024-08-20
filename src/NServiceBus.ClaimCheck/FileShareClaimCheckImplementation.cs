@@ -72,7 +72,7 @@ class FileShareClaimCheckImplementation : IClaimCheck
 
     public Task Start(CancellationToken cancellationToken = default)
     {
-        logger.Info("File share data bus started. Location: " + basePath);
+        logger.Info("File share claim check started. Location: " + basePath);
         //TODO: Implement a clean up thread
         return Task.CompletedTask;
     }

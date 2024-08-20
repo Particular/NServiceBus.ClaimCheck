@@ -51,7 +51,7 @@ class When_applying_the_databus_message_mutator_to_outgoing_messages
 
         await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
 
-        Assert.That(context.Headers[ClaimCheckHeaders.DataBusConfigContentType], Is.EqualTo(serializer.ContentType));
+        Assert.That(context.Headers[ClaimCheckHeaders.ClaimCheckConfigContentType], Is.EqualTo(serializer.ContentType));
     }
 
     [Test]

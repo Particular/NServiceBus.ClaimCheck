@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Settings;
 
 /// <summary>
-/// Used to configure the DataBus.
+/// Used to configure the claim check implementation.
 /// </summary>
 public class ClaimCheckFeature : Feature
 {
@@ -21,25 +21,25 @@ public class ClaimCheckFeature : Feature
 
     static Type GetSelectedFeatureForClaimCheck(SettingsHolder settings)
     {
-        return settings.Get<ClaimCheckDefinition>(SelectedDataBusKey)
+        return settings.Get<ClaimCheckDefinition>(SelectedClaimCheckKey)
             .ProvidedByFeature();
     }
 
     /// <summary>
-    /// Called when the features is activated.
+    /// Called when the feature is activated.
     /// </summary>
     protected override void Setup(FeatureConfigurationContext context)
     {
         if (context.Services.Any(sd => sd.ServiceType == typeof(IClaimCheckSerializer)))
         {
-            throw new Exception("Providing data bus serializer via dependency injection is no longer supported.");
+            throw new Exception("Providing claimcheck serializer via dependency injection is no longer supported.");
         }
 
-        var serializer = context.Settings.Get<IClaimCheckSerializer>(DataBusSerializerKey);
-        var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>(AdditionalDataBusDeserializersKey);
-        var conventions = context.Settings.Get<ClaimCheckConventions>(DataBusConventionsKey);
+        var serializer = context.Settings.Get<IClaimCheckSerializer>(ClaimCheckSerializerKey);
+        var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>(AdditionalClaimCheckDeserializersKey);
+        var conventions = context.Settings.Get<ClaimCheckConventions>(ClaimCheckConventionsKey);
 
-        context.RegisterStartupTask(b => new DataBusInitializer(b.GetRequiredService<IClaimCheck>()));
+        context.RegisterStartupTask(b => new ClaimCheckInitializer(b.GetRequiredService<IClaimCheck>()));
         context.Pipeline.Register(new ClaimCheckSendBehavior.Registration(conventions, serializer));
         context.Pipeline.Register(new ClaimCheckReceiveBehavior.Registration(b =>
         {
@@ -50,23 +50,23 @@ public class ClaimCheckFeature : Feature
         }));
     }
 
-    internal static string SelectedDataBusKey = "SelectedDataBus";
-    internal static string DataBusSerializerKey = "DataBusSerializer";
-    internal static string AdditionalDataBusDeserializersKey = "AdditionalDataBusDeserializers";
-    internal static string DataBusConventionsKey = "DataBusConventions";
+    internal static string SelectedClaimCheckKey = "SelectedClaimCheck";
+    internal static string ClaimCheckSerializerKey = "ClaimCheckSerializer";
+    internal static string AdditionalClaimCheckDeserializersKey = "AdditionalClaimCheckDeserializers";
+    internal static string ClaimCheckConventionsKey = "ClaimCheckConventions";
 
-    class DataBusInitializer : FeatureStartupTask
+    class ClaimCheckInitializer : FeatureStartupTask
     {
-        readonly IClaimCheck dataBus;
+        readonly IClaimCheck claimcheck;
 
-        public DataBusInitializer(IClaimCheck dataBus)
+        public ClaimCheckInitializer(IClaimCheck claimcheck)
         {
-            this.dataBus = dataBus;
+            this.claimcheck = claimcheck;
         }
 
         protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken = default)
         {
-            return dataBus.Start(cancellationToken);
+            return claimcheck.Start(cancellationToken);
         }
 
         protected override Task OnStop(IMessageSession session, CancellationToken cancellationToken = default)
