@@ -4,7 +4,7 @@ using System;
 using Features;
 
 /// <summary>
-/// Base class for data bus definitions.
+/// Base class for implementations of the claim check pattern definitions.
 /// </summary>
 public class FileShareClaimCheck : ClaimCheckDefinition
 {

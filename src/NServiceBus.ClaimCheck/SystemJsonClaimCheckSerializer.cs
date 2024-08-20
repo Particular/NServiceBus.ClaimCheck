@@ -5,16 +5,16 @@ using System.IO;
 using System.Text.Json;
 
 /// <summary>
-/// Data bus serialization using the <see cref="JsonSerializer"/> serializer.
+/// Claim Check serialization using the <see cref="JsonSerializer"/> serializer.
 /// </summary>
 public class SystemJsonClaimCheckSerializer : IClaimCheckSerializer
 {
     /// <summary>
     /// Serializes the property.
     /// </summary>
-    public void Serialize(object dataBusProperty, Stream stream)
+    public void Serialize(object claimCheckProperty, Stream stream)
     {
-        JsonSerializer.Serialize(stream, dataBusProperty);
+        JsonSerializer.Serialize(stream, claimCheckProperty);
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class SystemJsonClaimCheckSerializer : IClaimCheckSerializer
     }
 
     /// <summary>
-    /// The content type this serializer handles. Used to populate the <see cref="Headers.DataBusConfigContentType"/> header.
+    /// The content type this serializer handles. Used to populate the <see cref="ClaimCheckHeaders.ClaimCheckConfigContentType"/> header.
     /// </summary>
     public string ContentType { get; } = "application/json";
 }

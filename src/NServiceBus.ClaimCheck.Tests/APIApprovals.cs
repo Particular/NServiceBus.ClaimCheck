@@ -9,7 +9,7 @@ using PublicApiGenerator;
 public class APIApprovals
 {
     [Test]
-    public void ApproveDataBus()
+    public void ApproveClaimCheck()
     {
         var publicApi = typeof(ClaimCheckFeature).Assembly.GeneratePublicApi(new ApiGeneratorOptions
         {

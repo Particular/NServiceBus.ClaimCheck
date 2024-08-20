@@ -42,7 +42,7 @@ public class When_sending_unobtrusive_databus_properties_with_systemjson_message
         {
             EndpointSetup<DefaultServer>(builder =>
             {
-                ConventionsBuilderExtensions.DefiningDataBusPropertiesAs(builder.Conventions()
+                ConventionsBuilderExtensions.DefiningClaimCheckPropertiesAs(builder.Conventions()
                         .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MyMessageWithLargePayload).FullName), t => t.Name.Contains("Payload"));
 
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -59,7 +59,7 @@ public class When_sending_unobtrusive_databus_properties_with_systemjson_message
         {
             EndpointSetup<DefaultServer>(builder =>
             {
-                ConventionsBuilderExtensions.DefiningDataBusPropertiesAs(builder.Conventions()
+                ConventionsBuilderExtensions.DefiningClaimCheckPropertiesAs(builder.Conventions()
                         .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MyMessageWithLargePayload).FullName), t => t.Name.Contains("Payload"));
 
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");

@@ -5,9 +5,9 @@ using Features;
 
 class CustomClaimCheck : ClaimCheckDefinition
 {
-    public CustomClaimCheck(Func<IServiceProvider, IClaimCheck> dataBusFactory)
+    public CustomClaimCheck(Func<IServiceProvider, IClaimCheck> claimCheck)
     {
-        ClaimCheckFactory = dataBusFactory;
+        ClaimCheckFactory = claimCheck;
     }
 
     protected internal override Type ProvidedByFeature()
