@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Pipeline;
 
-class DataBusReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IIncomingLogicalMessageContext>
+class ClaimCheckReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IIncomingLogicalMessageContext>
 {
-    public DataBusReceiveBehavior(
-        IDataBus dataBus,
-        DataBusDeserializer deserializer,
+    public ClaimCheckReceiveBehavior(
+        IClaimCheck claimCheck,
+        ClaimCheckDeserializer deserializer,
         ClaimCheckConventions conventions)
     {
         this.conventions = conventions;
         this.deserializer = deserializer;
-        this.dataBus = dataBus;
+        this.claimCheck = claimCheck;
     }
 
     public async Task Invoke(IIncomingLogicalMessageContext context, Func<IIncomingLogicalMessageContext, Task> next)
@@ -25,34 +25,34 @@ class DataBusReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IIncomi
         {
             var propertyValue = property.Getter(message);
 
-            var dataBusProperty = propertyValue as IClaimCheckProperty;
+            var claimCheckProperty = propertyValue as IClaimCheckProperty;
             string headerKey;
 
-            if (dataBusProperty != null)
+            if (claimCheckProperty != null)
             {
-                headerKey = dataBusProperty.Key;
+                headerKey = claimCheckProperty.Key;
             }
             else
             {
                 headerKey = $"{message.GetType().FullName}.{property.Name}";
             }
 
-            if (!context.Headers.TryGetValue("NServiceBus.DataBus." + headerKey, out var dataBusKey))
+            if (!context.Headers.TryGetValue("NServiceBus.DataBus." + headerKey, out var claimCheckKey))
             {
                 continue;
             }
 
             using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
-                using (var stream = await dataBus.Get(dataBusKey, context.CancellationToken).ConfigureAwait(false))
+                using (var stream = await claimCheck.Get(claimCheckKey, context.CancellationToken).ConfigureAwait(false))
                 {
-                    context.Headers.TryGetValue(DataBusHeaders.DataBusConfigContentType, out var serializerUsed);
+                    context.Headers.TryGetValue(ClaimCheckHeaders.ClaimCheckConfigContentType, out var serializerUsed);
 
-                    if (dataBusProperty != null)
+                    if (claimCheckProperty != null)
                     {
-                        var value = deserializer.Deserialize(serializerUsed, dataBusProperty.Type, stream);
+                        var value = deserializer.Deserialize(serializerUsed, claimCheckProperty.Type, stream);
 
-                        dataBusProperty.SetValue(value);
+                        claimCheckProperty.SetValue(value);
                     }
                     else
                     {
@@ -68,12 +68,12 @@ class DataBusReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IIncomi
     }
 
     readonly ClaimCheckConventions conventions;
-    readonly IDataBus dataBus;
-    readonly DataBusDeserializer deserializer;
+    readonly IClaimCheck claimCheck;
+    readonly ClaimCheckDeserializer deserializer;
 
     public class Registration : RegisterStep
     {
-        public Registration(Func<IServiceProvider, DataBusReceiveBehavior> factory) : base("DataBusReceive", typeof(DataBusReceiveBehavior), "Copies the databus shared data back to the logical message", b => factory(b))
+        public Registration(Func<IServiceProvider, ClaimCheckReceiveBehavior> factory) : base("ClaimCheckReceive", typeof(ClaimCheckReceiveBehavior), "Copies the shared claim check data back to the logical message", b => factory(b))
         {
             InsertAfter("MutateIncomingMessages");
         }

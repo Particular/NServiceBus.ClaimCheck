@@ -8,13 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Pipeline;
 using Transport;
 
-class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
+class ClaimCheckSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
 {
-    public DataBusSendBehavior(IDataBus databus, IClaimCheckSerializer serializer, ClaimCheckConventions conventions)
+    public ClaimCheckSendBehavior(IClaimCheck claimCheck, IClaimCheckSerializer serializer, ClaimCheckConventions conventions)
     {
         this.conventions = conventions;
-        dataBusSerializer = serializer;
-        dataBus = databus;
+        claimCheckSerializer = serializer;
+        this.claimCheck = claimCheck;
     }
 
     public async Task Invoke(IOutgoingLogicalMessageContext context, Func<IOutgoingLogicalMessageContext, Task> next)
@@ -39,28 +39,28 @@ class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingL
 
             using (var stream = new MemoryStream())
             {
-                var dataBusProperty = propertyValue as IClaimCheckProperty;
+                var claimCheckProperty = propertyValue as IClaimCheckProperty;
 
-                if (dataBusProperty != null)
+                if (claimCheckProperty != null)
                 {
-                    propertyValue = dataBusProperty.GetValue();
+                    propertyValue = claimCheckProperty.GetValue();
                 }
 
-                dataBusSerializer.Serialize(propertyValue, stream);
+                claimCheckSerializer.Serialize(propertyValue, stream);
                 stream.Position = 0;
 
                 string headerValue;
 
                 using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    headerValue = await dataBus.Put(stream, timeToBeReceived, context.CancellationToken).ConfigureAwait(false);
+                    headerValue = await claimCheck.Put(stream, timeToBeReceived, context.CancellationToken).ConfigureAwait(false);
                 }
 
                 string headerKey;
 
-                if (dataBusProperty != null)
+                if (claimCheckProperty != null)
                 {
-                    dataBusProperty.Key = headerValue;
+                    claimCheckProperty.Key = headerValue;
                     //we use the headers to in order to allow the infrastructure (eg. the gateway) to modify the actual key
                     headerKey = headerValue;
                 }
@@ -72,7 +72,7 @@ class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingL
 
                 //we use the headers to in order to allow the infrastructure (eg. the gateway) to modify the actual key
                 context.Headers["NServiceBus.DataBus." + headerKey] = headerValue;
-                context.Headers[DataBusHeaders.DataBusConfigContentType] = dataBusSerializer.ContentType;
+                context.Headers[ClaimCheckHeaders.ClaimCheckConfigContentType] = claimCheckSerializer.ContentType;
             }
         }
 
@@ -80,16 +80,16 @@ class DataBusSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingL
     }
 
     readonly ClaimCheckConventions conventions;
-    readonly IDataBus dataBus;
-    readonly IClaimCheckSerializer dataBusSerializer;
+    readonly IClaimCheck claimCheck;
+    readonly IClaimCheckSerializer claimCheckSerializer;
 
     public class Registration : RegisterStep
     {
         public Registration(ClaimCheckConventions conventions, IClaimCheckSerializer serializer) : base(
-            "DataBusSend",
-            typeof(DataBusSendBehavior),
+            "ClaimCheckSend",
+            typeof(ClaimCheckSendBehavior),
             "Saves the payload into the shared location",
-            b => new DataBusSendBehavior(b.GetRequiredService<IDataBus>(), serializer, conventions))
+            b => new ClaimCheckSendBehavior(b.GetRequiredService<IClaimCheck>(), serializer, conventions))
         {
             InsertAfter("MutateOutgoingMessages");
             InsertAfter("ApplyTimeToBeReceived");

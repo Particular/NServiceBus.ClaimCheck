@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Logging;
 
-class FileShareDataBusImplementation : IDataBus
+class FileShareClaimCheckImplementation : IClaimCheck
 {
     // to account for mixed platforms ie windows -> linux or linux -> windows
     internal class PathNormalizer
@@ -34,7 +34,7 @@ class FileShareDataBusImplementation : IDataBus
     }
 
 
-    public FileShareDataBusImplementation(string basePath)
+    public FileShareClaimCheckImplementation(string basePath)
     {
         this.basePath = basePath;
     }
@@ -72,7 +72,7 @@ class FileShareDataBusImplementation : IDataBus
 
     public Task Start(CancellationToken cancellationToken = default)
     {
-        logger.Info("File share data bus started. Location: " + basePath);
+        logger.Info("File share claim check started. Location: " + basePath);
         //TODO: Implement a clean up thread
         return Task.CompletedTask;
     }
@@ -95,5 +95,5 @@ class FileShareDataBusImplementation : IDataBus
     }
 
     readonly string basePath;
-    static readonly ILog logger = LogManager.GetLogger<FileShareDataBusImplementation>();
+    static readonly ILog logger = LogManager.GetLogger<FileShareClaimCheckImplementation>();
 }

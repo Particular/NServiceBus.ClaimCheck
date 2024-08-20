@@ -4,16 +4,16 @@ using System;
 using System.IO;
 
 /// <summary>
-/// Interface used for serializing and deserializing of databus properties.
+/// Interface used for serializing and deserializing of claim check properties.
 /// </summary>
 public interface IClaimCheckSerializer
 {
     /// <summary>
     /// Serializes the property into the given stream.
     /// </summary>
-    /// <param name="databusProperty">The property to serialize.</param>
+    /// <param name="claimCheckProperty">The property to serialize.</param>
     /// <param name="stream">The stream to which to write the property.</param>
-    void Serialize(object databusProperty, Stream stream);
+    void Serialize(object claimCheckProperty, Stream stream);
 
     /// <summary>
     /// Deserializes a property from the given stream.
@@ -24,7 +24,7 @@ public interface IClaimCheckSerializer
     object Deserialize(Type propertyType, Stream stream);
 
     /// <summary>
-    /// The content type this serializer handles. Used to populate the <see cref="Headers.DataBusConfigContentType"/> header.
+    /// The content type this serializer handles. Used to populate the <see cref="ClaimCheckHeaders.ClaimCheckConfigContentType"/> header.
     /// </summary>
     string ContentType { get; }
 }

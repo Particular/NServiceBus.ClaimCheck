@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using NServiceBus.Logging;
 
-class DataBusDeserializer
+class ClaimCheckDeserializer
 {
-    public DataBusDeserializer(
+    public ClaimCheckDeserializer(
         IClaimCheckSerializer mainDeserializer,
         IReadOnlyCollection<IClaimCheckSerializer> additionalDeserializers)
     {
@@ -34,13 +34,13 @@ class DataBusDeserializer
                 }
                 catch (Exception ex)
                 {
-                    logger.Info($"Failed to deserialize data bus property using the main '{deserializerToTry.ContentType}' serializer.", ex);
+                    logger.Info($"Failed to deserialize the claim check property using the main '{deserializerToTry.ContentType}' serializer.", ex);
 
                     stream.Position = 0;
                 }
             }
 
-            throw new Exception($"None of the configured serializers for {string.Join(", ", deserializers.Keys)} where able to deserialize the data bus property.");
+            throw new Exception($"None of the configured serializers for {string.Join(", ", deserializers.Keys)} were able to deserialize the claim check property.");
         }
 
         if (!deserializers.TryGetValue(serializerUsed, out var deserializer))
@@ -54,5 +54,5 @@ class DataBusDeserializer
 
     readonly Dictionary<string, IClaimCheckSerializer> deserializers;
 
-    static readonly ILog logger = LogManager.GetLogger<DataBusDeserializer>();
+    static readonly ILog logger = LogManager.GetLogger<ClaimCheckDeserializer>();
 }

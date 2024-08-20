@@ -11,7 +11,7 @@ public class DataBusDeserializerTests
     public void Should_deserialized_with_the_serializer_used()
     {
         var jsonSerializer = new SystemJsonClaimCheckSerializer();
-        var deserializer = new DataBusDeserializer(jsonSerializer, [new FakeDataBusSerializer()]);
+        var deserializer = new ClaimCheckDeserializer(jsonSerializer, [new FakeDataBusSerializer()]);
         var somePropertyValue = "test";
 
         using (var stream = new MemoryStream())
@@ -29,7 +29,7 @@ public class DataBusDeserializerTests
     public void Should_throw_if_serializer_used_not_available()
     {
         var jsonSerializer = new SystemJsonClaimCheckSerializer();
-        var deserializer = new DataBusDeserializer(jsonSerializer, []);
+        var deserializer = new ClaimCheckDeserializer(jsonSerializer, []);
         var somePropertyValue = "test";
 
         using (var stream = new MemoryStream())
@@ -48,7 +48,7 @@ public class DataBusDeserializerTests
     {
         var jsonSerializer = new SystemJsonClaimCheckSerializer();
 
-        var deserializer = new DataBusDeserializer(jsonSerializer, [new FakeDataBusSerializer()]);
+        var deserializer = new ClaimCheckDeserializer(jsonSerializer, [new FakeDataBusSerializer()]);
         var somePropertyValue = "test";
         var deserializedProperty = deserializer.Deserialize(null, typeof(string), new MemoryStream());
 
@@ -60,7 +60,7 @@ public class DataBusDeserializerTests
     {
         var jsonSerializer = new SystemJsonClaimCheckSerializer();
 
-        var deserializer = new DataBusDeserializer(jsonSerializer, [new FakeDataBusSerializer(throwOnDeserialize: true)]);
+        var deserializer = new ClaimCheckDeserializer(jsonSerializer, [new FakeDataBusSerializer(throwOnDeserialize: true)]);
 
         using (var stream = new MemoryStream())
         {

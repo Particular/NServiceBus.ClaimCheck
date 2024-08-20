@@ -14,10 +14,10 @@ public class AcceptanceTests
     [SetUp]
     public void SetUp()
     {
-        dataBus = new FileShareDataBusImplementation(basePath) { MaxMessageTimeToLive = TimeSpan.MaxValue };
+        dataBus = new FileShareClaimCheckImplementation(basePath) { MaxMessageTimeToLive = TimeSpan.MaxValue };
     }
 
-    FileShareDataBusImplementation dataBus;
+    FileShareClaimCheckImplementation dataBus;
     string basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
     async Task<string> Put(string content, TimeSpan timeToLive, CancellationToken cancellationToken = default)

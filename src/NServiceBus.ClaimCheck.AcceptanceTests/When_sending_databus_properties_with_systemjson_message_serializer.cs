@@ -43,7 +43,7 @@ public class When_sending_databus_properties_with_systemjson_message_serializer
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
-                builder.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>().BasePath(basePath);
+                builder.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>().BasePath(basePath);
                 builder.UseSerialization<SystemJsonSerializer>();
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
             });
@@ -57,7 +57,7 @@ public class When_sending_databus_properties_with_systemjson_message_serializer
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
-                builder.UseClaimCheck<FileShareDataBus, SystemJsonClaimCheckSerializer>().BasePath(basePath);
+                builder.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>().BasePath(basePath);
                 builder.UseSerialization<SystemJsonSerializer>();
                 builder.RegisterMessageMutator(new Mutator());
             });

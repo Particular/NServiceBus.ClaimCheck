@@ -1,4 +1,4 @@
-namespace NServiceBus.ClaimCheck.DataBus.Utils.Reflection;
+namespace NServiceBus.ClaimCheck.Utils.Reflection;
 
 using System;
 using System.Collections.Concurrent;

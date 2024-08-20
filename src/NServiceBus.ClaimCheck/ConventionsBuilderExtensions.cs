@@ -5,26 +5,26 @@ using System.Reflection;
 using Configuration.AdvancedExtensibility;
 
 /// <summary>
-/// A set of extension methods for configuring unobtrusive DataBus properties.
+/// A set of extension methods for configuring unobtrusive claim check properties.
 /// </summary>
 public static class ConventionsBuilderExtensions
 {
     /// <summary>
-    /// Sets the function to be used to evaluate whether a property should be sent via the DataBus or not.
+    /// Sets the function to be used to evaluate whether a property should be sent via the implementation of the claim check pattern or not.
     /// </summary>
-    public static ConventionsBuilder DefiningDataBusPropertiesAs(this ConventionsBuilder builder, Func<PropertyInfo, bool> definesDataBusProperty)
+    public static ConventionsBuilder DefiningClaimCheckPropertiesAs(this ConventionsBuilder builder, Func<PropertyInfo, bool> definesClaimCheckProperty)
     {
-        ArgumentNullException.ThrowIfNull(definesDataBusProperty);
+        ArgumentNullException.ThrowIfNull(definesClaimCheckProperty);
 
-        var dataBusConventions = builder.GetSettings().GetOrDefault<ClaimCheckConventions>(Features.DataBusFeature.DataBusConventionsKey);
+        var claimCheckConventions = builder.GetSettings().GetOrDefault<ClaimCheckConventions>(Features.ClaimCheckFeature.ClaimCheckConventionsKey);
 
-        if (dataBusConventions == null)
+        if (claimCheckConventions == null)
         {
-            dataBusConventions = new ClaimCheckConventions();
-            builder.GetSettings().Set(Features.DataBusFeature.DataBusConventionsKey, dataBusConventions);
+            claimCheckConventions = new ClaimCheckConventions();
+            builder.GetSettings().Set(Features.ClaimCheckFeature.ClaimCheckConventionsKey, claimCheckConventions);
         }
 
-        dataBusConventions.IsClaimCheckPropertyAction = definesDataBusProperty;
+        claimCheckConventions.IsClaimCheckPropertyAction = definesClaimCheckProperty;
 
         return builder;
     }
