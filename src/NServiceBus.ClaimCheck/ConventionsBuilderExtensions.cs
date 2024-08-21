@@ -16,12 +16,12 @@ public static class ConventionsBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(definesClaimCheckProperty);
 
-        var claimCheckConventions = builder.GetSettings().GetOrDefault<ClaimCheckConventions>(Features.ClaimCheckFeature.ClaimCheckConventionsKey);
+        var claimCheckConventions = builder.GetSettings().GetOrDefault<ClaimCheckConventions>(Features.ClaimCheck.ClaimCheckConventionsKey);
 
         if (claimCheckConventions == null)
         {
             claimCheckConventions = new ClaimCheckConventions();
-            builder.GetSettings().Set(Features.ClaimCheckFeature.ClaimCheckConventionsKey, claimCheckConventions);
+            builder.GetSettings().Set(Features.ClaimCheck.ClaimCheckConventionsKey, claimCheckConventions);
         }
 
         claimCheckConventions.IsClaimCheckPropertyAction = definesClaimCheckProperty;
