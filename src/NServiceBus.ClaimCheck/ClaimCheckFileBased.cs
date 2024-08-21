@@ -8,7 +8,7 @@ class ClaimCheckFileBased : Feature
 {
     public ClaimCheckFileBased()
     {
-        DependsOn<ClaimCheckFeature>();
+        DependsOn<ClaimCheck>();
     }
 
     /// <summary>
