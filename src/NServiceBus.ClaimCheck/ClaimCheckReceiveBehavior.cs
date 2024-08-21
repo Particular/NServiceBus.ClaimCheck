@@ -1,8 +1,9 @@
-﻿namespace NServiceBus.ClaimCheck;
+﻿namespace NServiceBus;
 
 using System;
 using System.Threading.Tasks;
 using System.Transactions;
+using ClaimCheck;
 using Pipeline;
 
 class ClaimCheckReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IIncomingLogicalMessageContext>

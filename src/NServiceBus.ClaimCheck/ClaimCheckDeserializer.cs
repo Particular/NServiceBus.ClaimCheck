@@ -1,9 +1,10 @@
-﻿namespace NServiceBus.ClaimCheck;
+﻿namespace NServiceBus;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using NServiceBus.Logging;
+using ClaimCheck;
 
 class ClaimCheckDeserializer
 {

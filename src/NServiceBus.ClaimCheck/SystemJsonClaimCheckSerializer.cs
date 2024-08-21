@@ -1,8 +1,9 @@
-﻿namespace NServiceBus.ClaimCheck;
+﻿namespace NServiceBus;
 
 using System;
 using System.IO;
 using System.Text.Json;
+using NServiceBus.ClaimCheck;
 
 /// <summary>
 /// Claim Check serialization using the <see cref="JsonSerializer"/> serializer.

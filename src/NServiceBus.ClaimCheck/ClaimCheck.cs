@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClaimCheck;
+using NServiceBus.ClaimCheck;
 using Microsoft.Extensions.DependencyInjection;
 using Settings;
 
 /// <summary>
 /// Used to configure the claim check implementation.
 /// </summary>
-public class ClaimCheckFeature : Feature
+public class ClaimCheck : Feature
 {
-    internal ClaimCheckFeature()
+    internal ClaimCheck()
     {
         Defaults(s => s.EnableFeatureByDefault(GetSelectedFeatureForClaimCheck(s)));
     }

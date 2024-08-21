@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.ClaimCheck;
+﻿namespace NServiceBus;
 
 using System;
 using System.IO;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.Extensions.DependencyInjection;
 using Pipeline;
+using ClaimCheck;
 using Transport;
 
 class ClaimCheckSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>

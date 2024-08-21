@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.ClaimCheck;
+﻿namespace NServiceBus;
 
 using System;
 using System.Text.Json.Serialization;

@@ -1,7 +1,8 @@
-namespace NServiceBus.ClaimCheck;
+namespace NServiceBus;
 
 using System;
 using Features;
+using ClaimCheck;
 
 /// <summary>
 /// Base class for implementations of the claim check pattern definitions.

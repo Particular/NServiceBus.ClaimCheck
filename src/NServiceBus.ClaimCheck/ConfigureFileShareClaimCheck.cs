@@ -1,7 +1,8 @@
-namespace NServiceBus.ClaimCheck;
+namespace NServiceBus;
 
 using System;
 using Configuration.AdvancedExtensibility;
+using ClaimCheck;
 
 /// <summary>
 /// Contains extension methods to <see cref="EndpointConfiguration" /> for the file share implementation of the claim check pattern.

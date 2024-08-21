@@ -1,10 +1,11 @@
-namespace NServiceBus.ClaimCheck;
+namespace NServiceBus;
 
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Logging;
+using ClaimCheck;
 
 class FileShareClaimCheckImplementation : IClaimCheck
 {

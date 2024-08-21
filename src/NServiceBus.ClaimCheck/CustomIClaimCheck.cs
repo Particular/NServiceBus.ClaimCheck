@@ -7,12 +7,12 @@ class CustomIClaimCheck : Feature
 {
     public CustomIClaimCheck()
     {
-        DependsOn<ClaimCheckFeature>();
+        DependsOn<ClaimCheck>();
     }
 
     protected override void Setup(FeatureConfigurationContext context)
     {
-        var customClaimCheckDefinition = context.Settings.Get<ClaimCheckDefinition>(ClaimCheckFeature.SelectedClaimCheckKey) as CustomClaimCheck;
+        var customClaimCheckDefinition = context.Settings.Get<ClaimCheckDefinition>(ClaimCheck.SelectedClaimCheckKey) as CustomClaimCheck;
 
         if (customClaimCheckDefinition is not null)
         {
