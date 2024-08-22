@@ -1,7 +1,8 @@
-﻿namespace NServiceBus.ClaimCheck;
+﻿namespace NServiceBus;
 
 using System;
 using Features;
+using ClaimCheck;
 
 class CustomClaimCheck : ClaimCheckDefinition
 {
