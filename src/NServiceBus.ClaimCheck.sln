@@ -9,13 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.ClaimCheck.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.ClaimCheck.AcceptanceTests", "NServiceBus.ClaimCheck.AcceptanceTests\NServiceBus.ClaimCheck.AcceptanceTests.csproj", "{01B01C34-42CD-48D1-B566-38DE0AA3E70B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F33119A-5731-49AA-9DC6-336C0A54D259}"
+	ProjectSection(SolutionItems) = preProject
+		Custom.Build.props = Custom.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4629901B-CCF0-4CED-8792-B3EDD3A88FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +32,8 @@ Global
 		{01B01C34-42CD-48D1-B566-38DE0AA3E70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01B01C34-42CD-48D1-B566-38DE0AA3E70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01B01C34-42CD-48D1-B566-38DE0AA3E70B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
