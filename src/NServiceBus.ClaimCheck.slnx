@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Custom.Build.props" />
+  </Folder>
+  <Project Path="NServiceBus.ClaimCheck.AcceptanceTests/NServiceBus.ClaimCheck.AcceptanceTests.csproj" />
+  <Project Path="NServiceBus.ClaimCheck.Tests/NServiceBus.ClaimCheck.Tests.csproj" />
+  <Project Path="NServiceBus.ClaimCheck/NServiceBus.ClaimCheck.csproj" />
+</Solution>
