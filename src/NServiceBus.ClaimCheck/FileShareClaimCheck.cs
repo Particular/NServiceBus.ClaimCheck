@@ -1,6 +1,5 @@
 namespace NServiceBus;
 
-using System;
 using Features;
 using ClaimCheck;
 
@@ -9,14 +8,6 @@ using ClaimCheck;
 /// </summary>
 public class FileShareClaimCheck : ClaimCheckDefinition
 {
-    /// <summary>
-    /// The feature to enable when this claim check is selected.
-    /// </summary>
-    protected internal override Type ProvidedByFeature()
-    {
-        return typeof(ClaimCheckFileBased);
-    }
-
     protected internal override void ApplyTo(EndpointConfiguration endpointConfiguration)
         => endpointConfiguration.EnableFeature<ClaimCheckFileBased>();
 }
