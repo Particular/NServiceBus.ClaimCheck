@@ -6,6 +6,13 @@ namespace NServiceBus.ClaimCheck
         public ClaimCheckConventions() { }
         public bool IsClaimCheckProperty(System.Reflection.PropertyInfo property) { }
     }
+    [System.Obsolete("Custom claim checks are now implemented by inheriting from NServiceBus.Features.F" +
+        "eature. Will be removed in version 3.0.0.", true)]
+    public abstract class ClaimCheckDefinition
+    {
+        protected ClaimCheckDefinition() { }
+        protected abstract System.Type ProvidedByFeature();
+    }
     public class ClaimCheckExtensions : NServiceBus.Configuration.AdvancedExtensibility.ExposeSettings
     {
         public ClaimCheckExtensions(NServiceBus.Settings.SettingsHolder settings) { }
