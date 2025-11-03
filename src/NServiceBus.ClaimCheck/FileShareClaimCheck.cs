@@ -3,17 +3,27 @@ namespace NServiceBus;
 using System;
 using Features;
 using ClaimCheck;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Base class for implementations of the claim check pattern definitions.
 /// </summary>
-public class FileShareClaimCheck : ClaimCheckDefinition
+public class FileShareClaimCheck : Feature
 {
+    internal FileShareClaimCheck() => DependsOn<Features.ClaimCheck>();
+
     /// <summary>
-    /// The feature to enable when this claim check is selected.
+    /// See <see cref="Feature.Setup" />
     /// </summary>
-    protected internal override Type ProvidedByFeature()
+    protected override void Setup(FeatureConfigurationContext context)
     {
-        return typeof(ClaimCheckFileBased);
+        if (!context.Settings.TryGet("FileShareClaimCheckPath", out string basePath))
+        {
+            throw new InvalidOperationException("Specify the basepath for FileShareClaimCheck, eg endpointConfiguration.UseClaimCheck<FileShareClaimCheck>().BasePath(\"c:\\claimcheck\")");
+        }
+
+        var claimCheck = new FileShareClaimCheckImplementation(basePath);
+
+        context.Services.AddSingleton(typeof(IClaimCheck), claimCheck);
     }
 }

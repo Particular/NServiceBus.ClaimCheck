@@ -1,12 +1,17 @@
 ﻿namespace NServiceBus;
 
-using System;
-using Features;
 using ClaimCheck;
+using Features;
+using Microsoft.Extensions.DependencyInjection;
 
-class CustomClaimCheck(Func<IServiceProvider, IClaimCheck> claimCheck) : ClaimCheckDefinition
+class CustomClaimCheck : Feature
 {
-    protected internal override Type ProvidedByFeature() => typeof(CustomIClaimCheck);
+    public CustomClaimCheck() => DependsOn<Features.ClaimCheck>();
 
-    public Func<IServiceProvider, IClaimCheck> ClaimCheckFactory { get; } = claimCheck;
+    protected override void Setup(FeatureConfigurationContext context)
+    {
+        var claimCheckFactory = context.Settings.Get<Func<IServiceProvider, IClaimCheck>>();
+
+        context.Services.AddSingleton(sp => claimCheckFactory(sp));
+    }
 }

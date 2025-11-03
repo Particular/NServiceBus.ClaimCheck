@@ -10,7 +10,7 @@ using Settings;
 /// This class provides implementers of the claim check pattern with an extension mechanism for custom settings via extension methods.
 /// </summary>
 /// <typeparam name="T">The implementation of the claim check pattern definition eg <see cref="FileShareClaimCheck" />.</typeparam>
-public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : ClaimCheckDefinition
+public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : Features.Feature
 {
     /// <summary>
     /// Default constructor.
