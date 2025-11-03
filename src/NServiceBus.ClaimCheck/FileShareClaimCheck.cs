@@ -8,6 +8,7 @@ using ClaimCheck;
 /// </summary>
 public class FileShareClaimCheck : ClaimCheckDefinition
 {
+    /// <inheritdoc />
     protected internal override void ApplyTo(EndpointConfiguration endpointConfiguration)
         => endpointConfiguration.EnableFeature<ClaimCheckFileBased>();
 }
