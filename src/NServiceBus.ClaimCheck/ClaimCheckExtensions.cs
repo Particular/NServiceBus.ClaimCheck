@@ -37,14 +37,14 @@ public class ClaimCheckExtensions(SettingsHolder settings) : ExposeSettings(sett
     {
         ArgumentNullException.ThrowIfNull(serializer);
 
-        var deserializers = this.GetSettings().Get<List<IClaimCheckSerializer>>(Features.ClaimCheck.AdditionalClaimCheckDeserializersKey);
+        var deserializers = this.GetSettings().Get<List<IClaimCheckSerializer>>();
 
         if (deserializers.Any(d => d.ContentType == serializer.ContentType))
         {
             throw new ArgumentException($"Deserializer for content type '{serializer.ContentType}' is already registered.");
         }
 
-        var mainSerializer = this.GetSettings().Get<IClaimCheckSerializer>(Features.ClaimCheck.ClaimCheckSerializerKey);
+        var mainSerializer = this.GetSettings().Get<IClaimCheckSerializer>();
 
         if (mainSerializer.ContentType == serializer.ContentType)
         {

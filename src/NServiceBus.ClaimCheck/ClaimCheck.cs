@@ -27,24 +27,17 @@ public sealed class ClaimCheck : Feature
             throw new Exception("Providing claimcheck serializer via dependency injection is no longer supported.");
         }
 
-        var serializer = context.Settings.Get<IClaimCheckSerializer>(ClaimCheckSerializerKey);
-        var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>(AdditionalClaimCheckDeserializersKey);
-        var conventions = context.Settings.Get<ClaimCheckConventions>(ClaimCheckConventionsKey);
+        var serializer = context.Settings.Get<IClaimCheckSerializer>();
+        var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>();
+        var conventions = context.Settings.Get<ClaimCheckConventions>();
 
         context.RegisterStartupTask(b => new ClaimCheckInitializer(b.GetRequiredService<IClaimCheck>()));
         context.Pipeline.Register(new ClaimCheckSendBehavior.Registration(conventions, serializer));
-        context.Pipeline.Register(new ClaimCheckReceiveBehavior.Registration(b =>
-        {
-            return new ClaimCheckReceiveBehavior(
-                b.GetRequiredService<IClaimCheck>(),
-                new ClaimCheckDeserializer(serializer, additionalDeserializers),
-                conventions);
-        }));
+        context.Pipeline.Register(new ClaimCheckReceiveBehavior.Registration(b => new ClaimCheckReceiveBehavior(
+            b.GetRequiredService<IClaimCheck>(),
+            new ClaimCheckDeserializer(serializer, additionalDeserializers),
+            conventions)));
     }
-
-    internal const string ClaimCheckSerializerKey = "ClaimCheckSerializer";
-    internal const string AdditionalClaimCheckDeserializersKey = "AdditionalClaimCheckDeserializers";
-    internal const string ClaimCheckConventionsKey = "ClaimCheckConventions";
 
     class ClaimCheckInitializer(IClaimCheck claimcheck) : FeatureStartupTask
     {

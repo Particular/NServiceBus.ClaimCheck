@@ -1,9 +1,9 @@
 ﻿namespace NServiceBus;
 
 using System;
-using System.Collections.Generic;
 using ClaimCheck;
 using Configuration.AdvancedExtensibility;
+using Settings;
 
 /// <summary>
 /// Extension methods to configure the implementation of the claim check pattern.
@@ -61,13 +61,10 @@ public static class UseClaimCheckExtensions
 
     static void EnableClaimCheck(EndpointConfiguration config, ClaimCheckDefinition selectedClaimCheck, IClaimCheckSerializer claimCheckSerializer)
     {
-        config.GetSettings().Set(Features.ClaimCheck.ClaimCheckSerializerKey, claimCheckSerializer);
-        config.GetSettings().Set(Features.ClaimCheck.AdditionalClaimCheckDeserializersKey, new List<IClaimCheckSerializer>());
-
-        if (!config.GetSettings().HasSetting(Features.ClaimCheck.ClaimCheckConventionsKey))
-        {
-            config.GetSettings().Set(Features.ClaimCheck.ClaimCheckConventionsKey, new ClaimCheckConventions());
-        }
+        var settings = config.GetSettings();
+        settings.Set(claimCheckSerializer);
+        _ = settings.GetOrCreate<List<IClaimCheckSerializer>>();
+        _ = settings.GetOrCreate<ClaimCheckConventions>();
 
         selectedClaimCheck.ApplyTo(config);
     }
