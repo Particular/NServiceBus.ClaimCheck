@@ -5,17 +5,13 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ClaimCheck;
 using NUnit.Framework;
 
 [TestFixture]
 public class AcceptanceTests
 {
     [SetUp]
-    public void SetUp()
-    {
-        dataBus = new FileShareClaimCheckImplementation(basePath) { MaxMessageTimeToLive = TimeSpan.MaxValue };
-    }
+    public void SetUp() => dataBus = new FileShareClaimCheckImplementation(basePath) { MaxMessageTimeToLive = TimeSpan.MaxValue };
 
     FileShareClaimCheckImplementation dataBus;
     string basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -23,10 +19,8 @@ public class AcceptanceTests
     async Task<string> Put(string content, TimeSpan timeToLive, CancellationToken cancellationToken = default)
     {
         var byteArray = Encoding.ASCII.GetBytes(content);
-        using (var stream = new MemoryStream(byteArray))
-        {
-            return await dataBus.Put(stream, timeToLive, cancellationToken);
-        }
+        using var stream = new MemoryStream(byteArray);
+        return await dataBus.Put(stream, timeToLive, cancellationToken);
     }
 
     [Test]
@@ -35,11 +29,9 @@ public class AcceptanceTests
         const string content = "Test";
 
         var key = await Put(content, TimeSpan.MaxValue);
-        using (var stream = await dataBus.Get(key))
-        using (var streamReader = new StreamReader(stream))
-        {
-            Assert.That(await streamReader.ReadToEndAsync(), Is.EqualTo(content));
-        }
+        await using var stream = await dataBus.Get(key);
+        using var streamReader = new StreamReader(stream);
+        Assert.That(await streamReader.ReadToEndAsync(), Is.EqualTo(content));
     }
 
     [Test]
@@ -51,11 +43,9 @@ public class AcceptanceTests
 
         Parallel.For(0, 10, async i =>
         {
-            using (var stream = await dataBus.Get(key))
-            using (var streamReader = new StreamReader(stream))
-            {
-                Assert.That(await streamReader.ReadToEndAsync(), Is.EqualTo(content));
-            }
+            await using var stream = await dataBus.Get(key);
+            using var streamReader = new StreamReader(stream);
+            Assert.That(await streamReader.ReadToEndAsync(), Is.EqualTo(content));
         });
     }
 
@@ -66,11 +56,9 @@ public class AcceptanceTests
         const string content = "Test";
 
         var key = await Put(content, TimeSpan.MaxValue);
-        using (var stream = await dataBus.Get(key.Replace(Path.DirectorySeparatorChar, pathSeparator)))
-        using (var streamReader = new StreamReader(stream))
-        {
-            Assert.That(await streamReader.ReadToEndAsync(), Is.EqualTo(content));
-        }
+        await using var stream = await dataBus.Get(key.Replace(Path.DirectorySeparatorChar, pathSeparator));
+        using var streamReader = new StreamReader(stream);
+        Assert.That(await streamReader.ReadToEndAsync(), Is.EqualTo(content));
     }
 
     [Test]

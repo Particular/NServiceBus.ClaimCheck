@@ -38,8 +38,7 @@ public class When_sending_databus_properties_with_xml_message_serializer
 
     public class Sender : EndpointConfigurationBuilder
     {
-        public Sender()
-        {
+        public Sender() =>
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -47,13 +46,11 @@ public class When_sending_databus_properties_with_xml_message_serializer
                 builder.UseSerialization<XmlSerializer>();
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
             });
-        }
     }
 
     public class Receiver : EndpointConfigurationBuilder
     {
-        public Receiver()
-        {
+        public Receiver() =>
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -61,23 +58,15 @@ public class When_sending_databus_properties_with_xml_message_serializer
                 builder.UseSerialization<XmlSerializer>();
                 builder.RegisterMessageMutator(new Mutator());
             });
-        }
 
-        public class MyMessageHandler : IHandleMessages<MyMessageWithLargePayload>
+        public class MyMessageHandler(Context testContext) : IHandleMessages<MyMessageWithLargePayload>
         {
-            public MyMessageHandler(Context context)
-            {
-                testContext = context;
-            }
-
             public Task Handle(MyMessageWithLargePayload messageWithLargePayload, IMessageHandlerContext context)
             {
                 testContext.ReceivedPayload = messageWithLargePayload.Payload.Value;
 
                 return Task.CompletedTask;
             }
-
-            Context testContext;
         }
 
         public class Mutator : IMutateIncomingTransportMessages

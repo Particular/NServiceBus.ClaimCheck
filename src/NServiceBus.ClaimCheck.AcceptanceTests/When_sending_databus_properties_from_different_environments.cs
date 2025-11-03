@@ -56,8 +56,7 @@ public class When_sending_databus_properties_from_different_environments
 
     public class WindowsSender : EndpointConfigurationBuilder
     {
-        public WindowsSender()
-        {
+        public WindowsSender() =>
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -66,7 +65,6 @@ public class When_sending_databus_properties_from_different_environments
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
                 builder.RegisterMessageMutator(new MutateOutgoingForWindows());
             });
-        }
 
         public class MutateOutgoingForWindows : IMutateOutgoingTransportMessages
         {
@@ -82,8 +80,7 @@ public class When_sending_databus_properties_from_different_environments
 
     public class LinuxSender : EndpointConfigurationBuilder
     {
-        public LinuxSender()
-        {
+        public LinuxSender() =>
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -92,7 +89,6 @@ public class When_sending_databus_properties_from_different_environments
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
                 builder.RegisterMessageMutator(new MutateOutgoingForLinux());
             });
-        }
 
         public class MutateOutgoingForLinux : IMutateOutgoingTransportMessages
         {

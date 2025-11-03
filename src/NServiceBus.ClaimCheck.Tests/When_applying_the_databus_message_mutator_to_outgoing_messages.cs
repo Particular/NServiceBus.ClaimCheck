@@ -30,7 +30,7 @@ class When_applying_the_databus_message_mutator_to_outgoing_messages
 
         await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
 
-        Assert.That(fakeDatabus.TTBRUsed, Is.EqualTo(TimeSpan.MaxValue));
+        Assert.That(fakeDatabus.timeToBeReceivedUsed, Is.EqualTo(TimeSpan.MaxValue));
     }
 
     [Test]
@@ -73,27 +73,23 @@ class When_applying_the_databus_message_mutator_to_outgoing_messages
 
         await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
 
-        Assert.That(fakeDatabus.TTBRUsed, Is.EqualTo(TimeSpan.FromMinutes(1)));
+        Assert.That(fakeDatabus.timeToBeReceivedUsed, Is.EqualTo(TimeSpan.FromMinutes(1)));
     }
 
     class FakeDataBus : IClaimCheck
     {
         public Task<Stream> Get(string key, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
         public Task<string> Put(Stream stream, TimeSpan timeToBeReceived, CancellationToken cancellationToken = default)
         {
-            TTBRUsed = timeToBeReceived;
+            timeToBeReceivedUsed = timeToBeReceived;
             return Task.FromResult(Guid.NewGuid().ToString());
         }
 
         public Task Start(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
 
-        public TimeSpan TTBRUsed;
+        public TimeSpan timeToBeReceivedUsed;
     }
 }
