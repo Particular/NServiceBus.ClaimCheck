@@ -62,6 +62,7 @@ public static class UseClaimCheckExtensions
     {
         var settings = config.GetSettings();
         settings.Set(claimCheckSerializer);
+        settings.Set(selectedClaimCheck);
         _ = settings.GetOrCreate<List<IClaimCheckSerializer>>();
         _ = settings.GetOrCreate<ClaimCheckConventions>();
 

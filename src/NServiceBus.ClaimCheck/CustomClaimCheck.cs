@@ -2,13 +2,10 @@
 
 using System;
 using ClaimCheck;
-using Microsoft.Extensions.DependencyInjection;
 
 class CustomClaimCheck(Func<IServiceProvider, IClaimCheck> claimCheckFactory) : ClaimCheckDefinition
 {
-    protected internal override void ApplyTo(EndpointConfiguration endpointConfiguration)
-    {
-        endpointConfiguration.EnableFeature<Features.ClaimCheck>();
-        endpointConfiguration.RegisterComponents(s => s.AddSingleton(claimCheckFactory));
-    }
+    public Func<IServiceProvider, IClaimCheck> Factory { get; } = claimCheckFactory;
+
+    protected internal override void ApplyTo(EndpointConfiguration endpointConfiguration) => endpointConfiguration.EnableFeature<Features.CustomIClaimCheck>();
 }
