@@ -3,7 +3,6 @@
 using System;
 using ClaimCheck;
 using Configuration.AdvancedExtensibility;
-using Settings;
 
 /// <summary>
 /// Extension methods to configure the implementation of the claim check pattern.
