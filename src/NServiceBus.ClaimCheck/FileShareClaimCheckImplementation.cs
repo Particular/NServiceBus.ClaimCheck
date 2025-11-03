@@ -54,10 +54,11 @@ class FileShareClaimCheckImplementation(string basePath) : IClaimCheck
 
         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
-        using (var output = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous))
+        var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous);
+        await using (fileStream.ConfigureAwait(false))
         {
             const int bufferSize = 32 * 1024;
-            await stream.CopyToAsync(output, bufferSize, cancellationToken).ConfigureAwait(false);
+            await stream.CopyToAsync(fileStream, bufferSize, cancellationToken).ConfigureAwait(false);
         }
 
         logger.DebugFormat("Saved stream to '{0}'.", filePath);
