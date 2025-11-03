@@ -6,18 +6,12 @@ using System.Transactions;
 using ClaimCheck;
 using Pipeline;
 
-class ClaimCheckReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IIncomingLogicalMessageContext>
+class ClaimCheckReceiveBehavior(
+    IClaimCheck claimCheck,
+    ClaimCheckDeserializer deserializer,
+    ClaimCheckConventions conventions)
+    : IBehavior<IIncomingLogicalMessageContext, IIncomingLogicalMessageContext>
 {
-    public ClaimCheckReceiveBehavior(
-        IClaimCheck claimCheck,
-        ClaimCheckDeserializer deserializer,
-        ClaimCheckConventions conventions)
-    {
-        this.conventions = conventions;
-        this.deserializer = deserializer;
-        this.claimCheck = claimCheck;
-    }
-
     public async Task Invoke(IIncomingLogicalMessageContext context, Func<IIncomingLogicalMessageContext, Task> next)
     {
         var message = context.Message.Instance;
@@ -67,10 +61,6 @@ class ClaimCheckReceiveBehavior : IBehavior<IIncomingLogicalMessageContext, IInc
 
         await next(context).ConfigureAwait(false);
     }
-
-    readonly ClaimCheckConventions conventions;
-    readonly IClaimCheck claimCheck;
-    readonly ClaimCheckDeserializer deserializer;
 
     public class Registration : RegisterStep
     {
