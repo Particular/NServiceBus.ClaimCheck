@@ -28,11 +28,7 @@ public class ClaimCheckExtensions(SettingsHolder settings) : ExposeSettings(sett
     /// Configures additional deserializers to be considered when processing claim check properties. Can be called multiple times.
     /// </summary>
     public ClaimCheckExtensions AddDeserializer<TSerializer>() where TSerializer : IClaimCheckSerializer, new()
-    {
-        var serializer = new TSerializer();
-
-        return AddDeserializer(serializer);
-    }
+        => AddDeserializer(new TSerializer());
 
     /// <summary>
     /// Configures additional deserializers to be considered when processing claim check properties. Can be called multiple times.
