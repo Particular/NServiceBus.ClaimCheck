@@ -9,6 +9,7 @@ namespace NServiceBus.ClaimCheck
     public abstract class ClaimCheckDefinition
     {
         protected ClaimCheckDefinition() { }
+        protected abstract void ApplyTo(NServiceBus.EndpointConfiguration endpointConfiguration);
         protected abstract System.Type ProvidedByFeature();
     }
     public class ClaimCheckExtensions : NServiceBus.Configuration.AdvancedExtensibility.ExposeSettings
@@ -69,6 +70,7 @@ namespace NServiceBus
     public class FileShareClaimCheck : NServiceBus.ClaimCheck.ClaimCheckDefinition
     {
         public FileShareClaimCheck() { }
+        protected override void ApplyTo(NServiceBus.EndpointConfiguration endpointConfiguration) { }
         protected override System.Type ProvidedByFeature() { }
     }
     public interface IClaimCheckProperty

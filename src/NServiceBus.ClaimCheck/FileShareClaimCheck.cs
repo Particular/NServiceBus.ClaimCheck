@@ -16,4 +16,7 @@ public class FileShareClaimCheck : ClaimCheckDefinition
     {
         return typeof(ClaimCheckFileBased);
     }
+
+    protected internal override void ApplyTo(EndpointConfiguration endpointConfiguration)
+        => endpointConfiguration.EnableFeature<ClaimCheckFileBased>();
 }

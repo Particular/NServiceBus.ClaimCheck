@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus.ClaimCheck;
 using Microsoft.Extensions.DependencyInjection;
-using Settings;
 
 /// <summary>
 /// Used to configure the claim check implementation.
@@ -16,13 +15,6 @@ public class ClaimCheck : Feature
 {
     internal ClaimCheck()
     {
-        Defaults(s => s.EnableFeatureByDefault(GetSelectedFeatureForClaimCheck(s)));
-    }
-
-    static Type GetSelectedFeatureForClaimCheck(SettingsHolder settings)
-    {
-        return settings.Get<ClaimCheckDefinition>(SelectedClaimCheckKey)
-            .ProvidedByFeature();
     }
 
     /// <summary>
@@ -50,28 +42,17 @@ public class ClaimCheck : Feature
         }));
     }
 
-    internal static string SelectedClaimCheckKey = "SelectedClaimCheck";
-    internal static string ClaimCheckSerializerKey = "ClaimCheckSerializer";
-    internal static string AdditionalClaimCheckDeserializersKey = "AdditionalClaimCheckDeserializers";
-    internal static string ClaimCheckConventionsKey = "ClaimCheckConventions";
+    internal const string SelectedClaimCheckKey = "SelectedClaimCheck";
+    internal const string ClaimCheckSerializerKey = "ClaimCheckSerializer";
+    internal const string AdditionalClaimCheckDeserializersKey = "AdditionalClaimCheckDeserializers";
+    internal const string ClaimCheckConventionsKey = "ClaimCheckConventions";
 
-    class ClaimCheckInitializer : FeatureStartupTask
+    class ClaimCheckInitializer(IClaimCheck claimcheck) : FeatureStartupTask
     {
-        readonly IClaimCheck claimcheck;
+        protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken = default) =>
+            claimcheck.Start(cancellationToken);
 
-        public ClaimCheckInitializer(IClaimCheck claimcheck)
-        {
-            this.claimcheck = claimcheck;
-        }
-
-        protected override Task OnStart(IMessageSession session, CancellationToken cancellationToken = default)
-        {
-            return claimcheck.Start(cancellationToken);
-        }
-
-        protected override Task OnStop(IMessageSession session, CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
+        protected override Task OnStop(IMessageSession session, CancellationToken cancellationToken = default) =>
+            Task.CompletedTask;
     }
 }

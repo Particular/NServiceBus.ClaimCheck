@@ -10,36 +10,26 @@ using Settings;
 /// This class provides implementers of the claim check pattern with an extension mechanism for custom settings via extension methods.
 /// </summary>
 /// <typeparam name="T">The implementation of the claim check pattern definition eg <see cref="FileShareClaimCheck" />.</typeparam>
-public class ClaimCheckExtensions<T> : ClaimCheckExtensions where T : ClaimCheckDefinition
-{
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    public ClaimCheckExtensions(SettingsHolder settings)
-        : base(settings)
-    {
-    }
-}
+/// <remarks>
+/// Default constructor.
+/// </remarks>
+public class ClaimCheckExtensions<T>(SettingsHolder settings) : ClaimCheckExtensions(settings) where T : ClaimCheckDefinition;
 
 /// <summary>
 /// This class provides implementers of the claim check pattern with an extension mechanism for custom settings via extension methods.
 /// </summary>
-public class ClaimCheckExtensions : ExposeSettings
+/// <remarks>
+/// Default constructor.
+/// </remarks>
+public class ClaimCheckExtensions(SettingsHolder settings) : ExposeSettings(settings)
 {
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    public ClaimCheckExtensions(SettingsHolder settings)
-        : base(settings)
-    {
-    }
 
     /// <summary>
     /// Configures additional deserializers to be considered when processing claim check properties. Can be called multiple times.
     /// </summary>
     public ClaimCheckExtensions AddDeserializer<TSerializer>() where TSerializer : IClaimCheckSerializer, new()
     {
-        var serializer = (TSerializer)Activator.CreateInstance(typeof(TSerializer));
+        var serializer = new TSerializer();
 
         return AddDeserializer(serializer);
     }

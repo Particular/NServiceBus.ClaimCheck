@@ -34,8 +34,7 @@ public static class UseClaimCheckExtensions
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(claimCheckSerializer);
 
-        var claimCheckExtensionType = typeof(ClaimCheckExtensions<>).MakeGenericType(typeof(TClaimCheckDefinition));
-        var claimCheckExtension = (ClaimCheckExtensions<TClaimCheckDefinition>)Activator.CreateInstance(claimCheckExtensionType, config.GetSettings());
+        var claimCheckExtension = new ClaimCheckExtensions<TClaimCheckDefinition>(config.GetSettings());
         var claimCheckDefinition = new TClaimCheckDefinition();
 
         EnableClaimCheck(config, claimCheckDefinition, claimCheckSerializer);
@@ -71,6 +70,6 @@ public static class UseClaimCheckExtensions
             config.GetSettings().Set(Features.ClaimCheck.ClaimCheckConventionsKey, new ClaimCheckConventions());
         }
 
-        config.EnableFeature<Features.ClaimCheck>();
+        selectedClaimCheck.ApplyTo(config);
     }
 }

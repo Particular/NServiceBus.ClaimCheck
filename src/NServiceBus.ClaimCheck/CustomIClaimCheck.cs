@@ -7,14 +7,14 @@ class CustomIClaimCheck : Feature
 {
     public CustomIClaimCheck()
     {
+        EnableByDefault<ClaimCheck>();
+
         DependsOn<ClaimCheck>();
     }
 
     protected override void Setup(FeatureConfigurationContext context)
     {
-        var customClaimCheckDefinition = context.Settings.Get<ClaimCheckDefinition>(ClaimCheck.SelectedClaimCheckKey) as CustomClaimCheck;
-
-        if (customClaimCheckDefinition is not null)
+        if (context.Settings.Get<ClaimCheckDefinition>(ClaimCheck.SelectedClaimCheckKey) is CustomClaimCheck customClaimCheckDefinition)
         {
             context.Services.AddSingleton(sp => customClaimCheckDefinition.ClaimCheckFactory(sp));
         }

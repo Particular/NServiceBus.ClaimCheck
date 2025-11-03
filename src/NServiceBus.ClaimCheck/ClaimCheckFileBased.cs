@@ -8,12 +8,11 @@ class ClaimCheckFileBased : Feature
 {
     public ClaimCheckFileBased()
     {
+        EnableByDefault<ClaimCheck>();
+
         DependsOn<ClaimCheck>();
     }
 
-    /// <summary>
-    /// See <see cref="Feature.Setup" />
-    /// </summary>
     protected override void Setup(FeatureConfigurationContext context)
     {
         if (!context.Settings.TryGet("FileShareClaimCheckPath", out string basePath))
