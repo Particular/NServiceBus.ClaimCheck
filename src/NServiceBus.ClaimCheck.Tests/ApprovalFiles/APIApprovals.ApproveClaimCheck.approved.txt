@@ -98,7 +98,7 @@ namespace NServiceBus
 }
 namespace NServiceBus.Features
 {
-    public class ClaimCheck : NServiceBus.Features.Feature
+    public sealed class ClaimCheck : NServiceBus.Features.Feature
     {
         protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
     }

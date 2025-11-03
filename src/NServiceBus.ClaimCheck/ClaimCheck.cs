@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Used to configure the claim check implementation.
 /// </summary>
-public class ClaimCheck : Feature
+public sealed class ClaimCheck : Feature
 {
     internal ClaimCheck()
     {
