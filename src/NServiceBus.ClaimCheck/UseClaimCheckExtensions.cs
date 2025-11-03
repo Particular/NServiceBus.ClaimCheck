@@ -61,7 +61,6 @@ public static class UseClaimCheckExtensions
 
     static void EnableClaimCheck(EndpointConfiguration config, ClaimCheckDefinition selectedClaimCheck, IClaimCheckSerializer claimCheckSerializer)
     {
-        config.GetSettings().Set(Features.ClaimCheck.SelectedClaimCheckKey, selectedClaimCheck);
         config.GetSettings().Set(Features.ClaimCheck.ClaimCheckSerializerKey, claimCheckSerializer);
         config.GetSettings().Set(Features.ClaimCheck.AdditionalClaimCheckDeserializersKey, new List<IClaimCheckSerializer>());
 

@@ -42,7 +42,6 @@ public sealed class ClaimCheck : Feature
         }));
     }
 
-    internal const string SelectedClaimCheckKey = "SelectedClaimCheck";
     internal const string ClaimCheckSerializerKey = "ClaimCheckSerializer";
     internal const string AdditionalClaimCheckDeserializersKey = "AdditionalClaimCheckDeserializers";
     internal const string ClaimCheckConventionsKey = "ClaimCheckConventions";
