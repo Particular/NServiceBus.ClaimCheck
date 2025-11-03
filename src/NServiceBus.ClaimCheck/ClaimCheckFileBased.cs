@@ -12,17 +12,22 @@ sealed class ClaimCheckFileBased : Feature
 
         DependsOn<ClaimCheck>();
 
-        Prerequisite(c => c.Settings.Get<ClaimCheckDefinition>() is FileShareClaimCheck, "Checks whether the file-based claim check is active.");
+        Prerequisite(c =>
+        {
+            fileShareClaimCheck = c.Settings.Get<ClaimCheckDefinition>() as FileShareClaimCheck;
+            return fileShareClaimCheck is not null;
+        }, "Checks whether the file-based claim check is active.");
     }
 
     protected override void Setup(FeatureConfigurationContext context)
     {
-        if (!context.Settings.TryGet("FileShareClaimCheckPath", out string basePath))
+        if (string.IsNullOrEmpty(fileShareClaimCheck.BasePath))
         {
             throw new InvalidOperationException("Specify the basepath for FileShareClaimCheck, eg endpointConfiguration.UseClaimCheck<FileShareClaimCheck>().BasePath(\"c:\\claimcheck\")");
         }
-        var claimCheck = new FileShareClaimCheckImplementation(basePath);
 
-        context.Services.AddSingleton(typeof(IClaimCheck), claimCheck);
+        context.Services.AddSingleton<IClaimCheck>(new FileShareClaimCheckImplementation(fileShareClaimCheck.BasePath));
     }
+
+    FileShareClaimCheck fileShareClaimCheck;
 }
