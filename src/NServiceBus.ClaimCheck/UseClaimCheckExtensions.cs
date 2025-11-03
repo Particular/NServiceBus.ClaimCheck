@@ -33,12 +33,11 @@ public static class UseClaimCheckExtensions
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(claimCheckSerializer);
 
-        var claimCheckExtension = new ClaimCheckExtensions<TClaimCheckDefinition>(config.GetSettings());
         var claimCheckDefinition = new TClaimCheckDefinition();
 
         EnableClaimCheck(config, claimCheckDefinition, claimCheckSerializer);
 
-        return claimCheckExtension;
+        return new ClaimCheckExtensions<TClaimCheckDefinition>(config.GetSettings());
     }
 
     /// <summary>
@@ -58,10 +57,12 @@ public static class UseClaimCheckExtensions
         return new ClaimCheckExtensions(config.GetSettings());
     }
 
-    static void EnableClaimCheck(EndpointConfiguration config, ClaimCheckDefinition selectedClaimCheck, IClaimCheckSerializer claimCheckSerializer)
+    static void EnableClaimCheck<TDefinition>(EndpointConfiguration config, TDefinition selectedClaimCheck, IClaimCheckSerializer claimCheckSerializer)
+        where TDefinition : ClaimCheckDefinition
     {
         var settings = config.GetSettings();
         settings.Set(claimCheckSerializer);
+        settings.Set<ClaimCheckDefinition>(selectedClaimCheck);
         settings.Set(selectedClaimCheck);
         _ = settings.GetOrCreate<List<IClaimCheckSerializer>>();
         _ = settings.GetOrCreate<ClaimCheckConventions>();

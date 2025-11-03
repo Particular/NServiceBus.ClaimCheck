@@ -19,7 +19,7 @@ public static class ConfigureFileShareClaimCheck
     {
         ArgumentNullException.ThrowIfNull(config);
         ArgumentException.ThrowIfNullOrWhiteSpace(basePath);
-        ((FileShareClaimCheck)config.GetSettings().Get<ClaimCheckDefinition>()).BasePath = basePath;
+        config.GetSettings().Get<FileShareClaimCheck>().BasePath = basePath;
         return config;
     }
 }
