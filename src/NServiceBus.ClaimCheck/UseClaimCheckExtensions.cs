@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using ClaimCheck;
 using Configuration.AdvancedExtensibility;
 
@@ -62,15 +63,20 @@ public static class UseClaimCheckExtensions
 
     static void EnableClaimCheck(EndpointConfiguration config, ClaimCheckDefinition selectedClaimCheck, IClaimCheckSerializer claimCheckSerializer)
     {
-        config.GetSettings().Set(Features.ClaimCheck.SelectedClaimCheckKey, selectedClaimCheck);
-        config.GetSettings().Set(Features.ClaimCheck.ClaimCheckSerializerKey, claimCheckSerializer);
-        config.GetSettings().Set(Features.ClaimCheck.AdditionalClaimCheckDeserializersKey, new List<IClaimCheckSerializer>());
+        var settings = config.GetSettings();
+        settings.Set(Features.ClaimCheck.SelectedClaimCheckKey, selectedClaimCheck);
+        settings.Set(Features.ClaimCheck.ClaimCheckSerializerKey, claimCheckSerializer);
+        settings.Set(Features.ClaimCheck.AdditionalClaimCheckDeserializersKey, new List<IClaimCheckSerializer>());
 
-        if (!config.GetSettings().HasSetting(Features.ClaimCheck.ClaimCheckConventionsKey))
+        if (!settings.HasSetting(Features.ClaimCheck.ClaimCheckConventionsKey))
         {
-            config.GetSettings().Set(Features.ClaimCheck.ClaimCheckConventionsKey, new ClaimCheckConventions());
+            settings.Set(Features.ClaimCheck.ClaimCheckConventionsKey, new ClaimCheckConventions());
         }
 
+        var methods = typeof(EndpointConfigurationExtensions).GetMethods();
+        var enableFeatureGenericMethod = methods.Single(m => m.Name == "EnableFeature" && m.IsGenericMethod);
+        var method = enableFeatureGenericMethod!.MakeGenericMethod(selectedClaimCheck.ProvidedByFeature());
+        method.Invoke(null, [config]);
         config.EnableFeature<Features.ClaimCheck>();
     }
 }
