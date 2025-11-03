@@ -6,11 +6,6 @@ namespace NServiceBus.ClaimCheck
         public ClaimCheckConventions() { }
         public bool IsClaimCheckProperty(System.Reflection.PropertyInfo property) { }
     }
-    public abstract class ClaimCheckDefinition
-    {
-        protected ClaimCheckDefinition() { }
-        protected abstract System.Type ProvidedByFeature();
-    }
     public class ClaimCheckExtensions : NServiceBus.Configuration.AdvancedExtensibility.ExposeSettings
     {
         public ClaimCheckExtensions(NServiceBus.Settings.SettingsHolder settings) { }
@@ -20,7 +15,7 @@ namespace NServiceBus.ClaimCheck
             where TSerializer : NServiceBus.ClaimCheck.IClaimCheckSerializer { }
     }
     public class ClaimCheckExtensions<T> : NServiceBus.ClaimCheck.ClaimCheckExtensions
-        where T : NServiceBus.ClaimCheck.ClaimCheckDefinition
+        where T : NServiceBus.Features.Feature
     {
         public ClaimCheckExtensions(NServiceBus.Settings.SettingsHolder settings) { }
     }
@@ -66,10 +61,9 @@ namespace NServiceBus
     {
         public static NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.FileShareClaimCheck> BasePath(this NServiceBus.ClaimCheck.ClaimCheckExtensions<NServiceBus.FileShareClaimCheck> config, string basePath) { }
     }
-    public class FileShareClaimCheck : NServiceBus.ClaimCheck.ClaimCheckDefinition
+    public class FileShareClaimCheck : NServiceBus.Features.Feature
     {
-        public FileShareClaimCheck() { }
-        protected override System.Type ProvidedByFeature() { }
+        protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
     }
     public interface IClaimCheckProperty
     {
@@ -89,10 +83,10 @@ namespace NServiceBus
     public static class UseClaimCheckExtensions
     {
         public static NServiceBus.ClaimCheck.ClaimCheckExtensions UseClaimCheck(this NServiceBus.EndpointConfiguration config, System.Func<System.IServiceProvider, NServiceBus.ClaimCheck.IClaimCheck> claimCheckFactory, NServiceBus.ClaimCheck.IClaimCheckSerializer claimCheckSerializer) { }
-        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<TClaimCheckDefinition> UseClaimCheck<TClaimCheckDefinition>(this NServiceBus.EndpointConfiguration config, NServiceBus.ClaimCheck.IClaimCheckSerializer claimCheckSerializer)
-            where TClaimCheckDefinition : NServiceBus.ClaimCheck.ClaimCheckDefinition, new () { }
-        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<TClaimCheckDefinition> UseClaimCheck<TClaimCheckDefinition, TClaimCheckSerializer>(this NServiceBus.EndpointConfiguration config)
-            where TClaimCheckDefinition : NServiceBus.ClaimCheck.ClaimCheckDefinition, new ()
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<TClaimCheckFeature> UseClaimCheck<TClaimCheckFeature>(this NServiceBus.EndpointConfiguration config, NServiceBus.ClaimCheck.IClaimCheckSerializer claimCheckSerializer)
+            where TClaimCheckFeature : NServiceBus.Features.Feature { }
+        public static NServiceBus.ClaimCheck.ClaimCheckExtensions<TClaimCheckFeature> UseClaimCheck<TClaimCheckFeature, TClaimCheckSerializer>(this NServiceBus.EndpointConfiguration config)
+            where TClaimCheckFeature : NServiceBus.Features.Feature
             where TClaimCheckSerializer : NServiceBus.ClaimCheck.IClaimCheckSerializer, new () { }
     }
 }
