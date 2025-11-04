@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Logging;
 using ClaimCheck;
 
-class FileShareClaimCheckImplementation : IClaimCheck
+class FileShareClaimCheckImplementation(string basePath) : IClaimCheck
 {
     // to account for mixed platforms ie windows -> linux or linux -> windows
-    internal class PathNormalizer
+    static class PathNormalizer
     {
         //    Example keys
         //    string key1 = "foldername/filename";
@@ -34,12 +34,6 @@ class FileShareClaimCheckImplementation : IClaimCheck
         }
     }
 
-
-    public FileShareClaimCheckImplementation(string basePath)
-    {
-        this.basePath = basePath;
-    }
-
     public TimeSpan MaxMessageTimeToLive { get; set; }
 
     public Task<Stream> Get(string key, CancellationToken cancellationToken = default)
@@ -49,7 +43,7 @@ class FileShareClaimCheckImplementation : IClaimCheck
         logger.DebugFormat("Opening stream from '{0}'.", filePath);
 
         var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, true);
-        return Task.FromResult((Stream)fileStream);
+        return Task.FromResult<Stream>(fileStream);
     }
 
     public async Task<string> Put(Stream stream, TimeSpan timeToBeReceived, CancellationToken cancellationToken = default)
@@ -60,10 +54,11 @@ class FileShareClaimCheckImplementation : IClaimCheck
 
         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
-        using (var output = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous))
+        var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.Read, 4096, FileOptions.Asynchronous);
+        await using (fileStream.ConfigureAwait(false))
         {
             const int bufferSize = 32 * 1024;
-            await stream.CopyToAsync(output, bufferSize, cancellationToken).ConfigureAwait(false);
+            await stream.CopyToAsync(fileStream, bufferSize, cancellationToken).ConfigureAwait(false);
         }
 
         logger.DebugFormat("Saved stream to '{0}'.", filePath);
@@ -95,6 +90,5 @@ class FileShareClaimCheckImplementation : IClaimCheck
         return Path.Combine(keepMessageUntil.ToString("yyyy-MM-dd_HH"), Guid.NewGuid().ToString());
     }
 
-    readonly string basePath;
     static readonly ILog logger = LogManager.GetLogger<FileShareClaimCheckImplementation>();
 }

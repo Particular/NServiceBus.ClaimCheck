@@ -14,15 +14,13 @@ public class DataBusDeserializerTests
         var deserializer = new ClaimCheckDeserializer(jsonSerializer, [new FakeDataBusSerializer()]);
         var somePropertyValue = "test";
 
-        using (var stream = new MemoryStream())
-        {
-            jsonSerializer.Serialize(somePropertyValue, stream);
-            stream.Position = 0;
+        using var stream = new MemoryStream();
+        jsonSerializer.Serialize(somePropertyValue, stream);
+        stream.Position = 0;
 
-            var deserializedProperty = deserializer.Deserialize(jsonSerializer.ContentType, typeof(string), stream);
+        var deserializedProperty = deserializer.Deserialize(jsonSerializer.ContentType, typeof(string), stream);
 
-            Assert.That(deserializedProperty, Is.EqualTo(somePropertyValue));
-        }
+        Assert.That(deserializedProperty, Is.EqualTo(somePropertyValue));
     }
 
     [Test]
@@ -32,15 +30,13 @@ public class DataBusDeserializerTests
         var deserializer = new ClaimCheckDeserializer(jsonSerializer, []);
         var somePropertyValue = "test";
 
-        using (var stream = new MemoryStream())
-        {
-            jsonSerializer.Serialize(somePropertyValue, stream);
-            stream.Position = 0;
+        using var stream = new MemoryStream();
+        jsonSerializer.Serialize(somePropertyValue, stream);
+        stream.Position = 0;
 
-            var ex = Assert.Throws<Exception>(() => deserializer.Deserialize("other-serializer-not-configured", typeof(string), stream));
+        var ex = Assert.Throws<Exception>(() => deserializer.Deserialize("other-serializer-not-configured", typeof(string), stream));
 
-            Assert.That(ex?.Message, Contains.Substring("other-serializer-not-configured"));
-        }
+        Assert.That(ex?.Message, Contains.Substring("other-serializer-not-configured"));
     }
 
     [Test]
@@ -62,12 +58,10 @@ public class DataBusDeserializerTests
 
         var deserializer = new ClaimCheckDeserializer(jsonSerializer, [new FakeDataBusSerializer(throwOnDeserialize: true)]);
 
-        using (var stream = new MemoryStream())
-        {
-            stream.Write(new byte[5], 0, 5);
-            stream.Position = 0;
+        using var stream = new MemoryStream();
+        stream.Write(new byte[5], 0, 5);
+        stream.Position = 0;
 
-            Assert.Throws<Exception>(() => deserializer.Deserialize(null, typeof(string), stream));
-        }
+        Assert.Throws<Exception>(() => deserializer.Deserialize(null, typeof(string), stream));
     }
 }

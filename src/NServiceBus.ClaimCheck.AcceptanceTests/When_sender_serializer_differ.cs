@@ -38,8 +38,7 @@ public class When_sender_serializer_differ
 
     public class Sender : EndpointConfigurationBuilder
     {
-        public Sender()
-        {
+        public Sender() =>
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -48,13 +47,11 @@ public class When_sender_serializer_differ
 
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
             });
-        }
     }
 
     public class Receiver : EndpointConfigurationBuilder
     {
-        public Receiver()
-        {
+        public Receiver() =>
             EndpointSetup<DefaultServer>(builder =>
             {
                 var basePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "databus", "sender");
@@ -65,23 +62,15 @@ public class When_sender_serializer_differ
 
                 builder.RegisterMessageMutator(new Mutator());
             });
-        }
 
-        public class MyMessageHandler : IHandleMessages<MyMessageWithLargePayload>
+        public class MyMessageHandler(Context testContext) : IHandleMessages<MyMessageWithLargePayload>
         {
-            public MyMessageHandler(Context context)
-            {
-                testContext = context;
-            }
-
             public Task Handle(MyMessageWithLargePayload messageWithLargePayload, IMessageHandlerContext context)
             {
                 testContext.ReceivedPayload = messageWithLargePayload.Payload.Value;
 
                 return Task.CompletedTask;
             }
-
-            Context testContext;
         }
 
         public class Mutator : IMutateIncomingTransportMessages
@@ -99,16 +88,11 @@ public class When_sender_serializer_differ
 
     class MyCustomSerializer : IClaimCheckSerializer
     {
-        public void Serialize(object databusProperty, Stream stream)
-        {
+        public void Serialize(object databusProperty, Stream stream) =>
             new System.Xml.Serialization.XmlSerializer(databusProperty.GetType())
                 .Serialize(stream, databusProperty);
-        }
 
-        public object Deserialize(Type propertyType, Stream stream)
-        {
-            return new System.Xml.Serialization.XmlSerializer(propertyType).Deserialize(stream);
-        }
+        public object Deserialize(Type propertyType, Stream stream) => new System.Xml.Serialization.XmlSerializer(propertyType).Deserialize(stream);
 
         public string ContentType => "xml";
     }

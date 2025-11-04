@@ -38,49 +38,31 @@ public class When_using_custom_IDataBus
 
     public class SenderViaFluent : EndpointConfigurationBuilder
     {
-        public SenderViaFluent()
-        {
+        public SenderViaFluent() =>
             EndpointSetup<DefaultServer>(b =>
             {
                 b.UseClaimCheck(sp => new MyDataBus(sp.GetRequiredService<Context>()), new SystemJsonClaimCheckSerializer());
                 b.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(ReceiverViaFluent));
             });
-        }
     }
 
     public class ReceiverViaFluent : EndpointConfigurationBuilder
     {
-        public ReceiverViaFluent()
-        {
-            EndpointSetup<DefaultServer>(b => b.UseClaimCheck(sp => new MyDataBus(sp.GetRequiredService<Context>()), new SystemJsonClaimCheckSerializer()));
-        }
+        public ReceiverViaFluent() => EndpointSetup<DefaultServer>(b => b.UseClaimCheck(sp => new MyDataBus(sp.GetRequiredService<Context>()), new SystemJsonClaimCheckSerializer()));
 
-        public class MyMessageHandler : IHandleMessages<MyMessageWithLargePayload>
+        public class MyMessageHandler(Context testContext) : IHandleMessages<MyMessageWithLargePayload>
         {
-            public MyMessageHandler(Context context)
-            {
-                testContext = context;
-            }
-
             public Task Handle(MyMessageWithLargePayload messageWithLargePayload, IMessageHandlerContext context)
             {
                 testContext.ReceivedPayload = messageWithLargePayload.Payload.Value;
 
                 return Task.CompletedTask;
             }
-
-            Context testContext;
         }
     }
 
-    public class MyDataBus : IClaimCheck
+    public class MyDataBus(Context context) : IClaimCheck
     {
-        Context context;
-        public MyDataBus(Context context)
-        {
-            this.context = context;
-        }
-
         public Task<Stream> Get(string key, CancellationToken cancellationToken = default)
         {
             var fileStream = new FileStream(context.TempPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
@@ -96,10 +78,7 @@ public class When_using_custom_IDataBus
             return Task.FromResult("key");
         }
 
-        public Task Start(CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
+        public Task Start(CancellationToken cancellationToken = default) => Task.CompletedTask;
     }
 
 

@@ -9,15 +9,12 @@ using Pipeline;
 using ClaimCheck;
 using Transport;
 
-class ClaimCheckSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
+class ClaimCheckSendBehavior(
+    IClaimCheck claimCheck,
+    IClaimCheckSerializer serializer,
+    ClaimCheckConventions conventions)
+    : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
 {
-    public ClaimCheckSendBehavior(IClaimCheck claimCheck, IClaimCheckSerializer serializer, ClaimCheckConventions conventions)
-    {
-        this.conventions = conventions;
-        claimCheckSerializer = serializer;
-        this.claimCheck = claimCheck;
-    }
-
     public async Task Invoke(IOutgoingLogicalMessageContext context, Func<IOutgoingLogicalMessageContext, Task> next)
     {
         var timeToBeReceived = TimeSpan.MaxValue;
@@ -47,7 +44,7 @@ class ClaimCheckSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoi
                     propertyValue = claimCheckProperty.GetValue();
                 }
 
-                claimCheckSerializer.Serialize(propertyValue, stream);
+                serializer.Serialize(propertyValue, stream);
                 stream.Position = 0;
 
                 string headerValue;
@@ -73,16 +70,12 @@ class ClaimCheckSendBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoi
 
                 //we use the headers to in order to allow the infrastructure (eg. the gateway) to modify the actual key
                 context.Headers["NServiceBus.DataBus." + headerKey] = headerValue;
-                context.Headers[ClaimCheckHeaders.ClaimCheckConfigContentType] = claimCheckSerializer.ContentType;
+                context.Headers[ClaimCheckHeaders.ClaimCheckConfigContentType] = serializer.ContentType;
             }
         }
 
         await next(context).ConfigureAwait(false);
     }
-
-    readonly ClaimCheckConventions conventions;
-    readonly IClaimCheck claimCheck;
-    readonly IClaimCheckSerializer claimCheckSerializer;
 
     public class Registration : RegisterStep
     {

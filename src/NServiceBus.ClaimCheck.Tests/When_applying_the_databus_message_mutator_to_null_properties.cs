@@ -20,12 +20,10 @@ class When_applying_the_databus_message_mutator_to_null_properties
         var serializer = new SystemJsonClaimCheckSerializer();
         var sendBehavior = new ClaimCheckSendBehavior(null, serializer, new ClaimCheckConventions());
 
-        using (var stream = new MemoryStream())
-        {
-            serializer.Serialize("test", stream);
-            stream.Position = 0;
+        using var stream = new MemoryStream();
+        serializer.Serialize("test", stream);
+        stream.Position = 0;
 
-            await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
-        }
+        await sendBehavior.Invoke(context, ctx => Task.CompletedTask);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace NServiceBus.ClaimCheck;
 
-using System;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Defines an implementation of the claim check pattern that can be used by NServiceBus.
@@ -8,7 +8,8 @@ using System;
 public abstract class ClaimCheckDefinition
 {
     /// <summary>
-    /// The feature to enable when this implmentation of the claim check pattern is selected.
+    /// Called when the claim check implementation should register itself in the container.
     /// </summary>
-    protected internal abstract Type ProvidedByFeature();
+    /// <param name="services">The service collection to register in.</param>
+    protected internal abstract void ConfigureServices(IServiceCollection services);
 }
