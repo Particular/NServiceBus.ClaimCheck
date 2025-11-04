@@ -67,6 +67,6 @@ public static class UseClaimCheckExtensions
         _ = settings.GetOrCreate<List<IClaimCheckSerializer>>();
         _ = settings.GetOrCreate<ClaimCheckConventions>();
 
-        selectedClaimCheck.ApplyTo(config);
+        config.EnableFeature<Features.ClaimCheck>();
     }
 }
