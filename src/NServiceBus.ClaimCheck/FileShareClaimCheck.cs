@@ -2,6 +2,7 @@ namespace NServiceBus;
 
 using ClaimCheck;
 using Microsoft.Extensions.DependencyInjection;
+using Settings;
 
 /// <summary>
 /// Base class for implementations of the claim check pattern definitions.
@@ -11,7 +12,7 @@ public class FileShareClaimCheck : ClaimCheckDefinition
     internal string BasePath { get; set; }
 
     /// <inheritdoc />
-    protected internal override void ConfigureServices(IServiceCollection services)
+    protected internal override void Configure(IReadOnlySettings settings, IServiceCollection services)
     {
         if (string.IsNullOrEmpty(BasePath))
         {
@@ -19,5 +20,10 @@ public class FileShareClaimCheck : ClaimCheckDefinition
         }
 
         services.AddSingleton<IClaimCheck>(new FileShareClaimCheckImplementation(BasePath));
+
+        settings.AddStartupDiagnosticsSection("FileShareClaimCheck", new
+        {
+            BasePath
+        });
     }
 }
