@@ -1,16 +1,21 @@
-namespace NServiceBus;
+namespace NServiceBus.Features;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Features;
 using Microsoft.Extensions.DependencyInjection;
-using ClaimCheck;
+using NServiceBus.ClaimCheck;
 
-sealed class ClaimCheckFeature : Feature
+/// <summary>
+/// Used to configure the claim check implementation.
+/// </summary>
+public sealed class ClaimCheck : Feature
 {
+    internal ClaimCheck() { }
+
+    /// <inheritdoc />
     protected override void Setup(FeatureConfigurationContext context)
     {
         if (context.Services.Any(sd => sd.ServiceType == typeof(IClaimCheckSerializer)))
@@ -21,9 +26,6 @@ sealed class ClaimCheckFeature : Feature
         var serializer = context.Settings.Get<IClaimCheckSerializer>();
         var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>();
         var conventions = context.Settings.Get<ClaimCheckConventions>();
-        var definition = context.Settings.Get<ClaimCheckDefinition>();
-
-        definition.ConfigureServices(context.Services);
 
         context.RegisterStartupTask(b => new ClaimCheckInitializer(b.GetRequiredService<IClaimCheck>()));
         context.Pipeline.Register(new ClaimCheckSendBehavior.Registration(conventions, serializer));

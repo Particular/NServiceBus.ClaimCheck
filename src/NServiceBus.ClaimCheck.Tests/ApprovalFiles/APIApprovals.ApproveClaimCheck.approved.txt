@@ -9,7 +9,7 @@ namespace NServiceBus.ClaimCheck
     public abstract class ClaimCheckDefinition
     {
         protected ClaimCheckDefinition() { }
-        protected abstract void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services);
+        protected abstract void EnableFeature(NServiceBus.Settings.SettingsHolder settings);
     }
     public class ClaimCheckExtensions : NServiceBus.Configuration.AdvancedExtensibility.ExposeSettings
     {
@@ -69,7 +69,7 @@ namespace NServiceBus
     public class FileShareClaimCheck : NServiceBus.ClaimCheck.ClaimCheckDefinition
     {
         public FileShareClaimCheck() { }
-        protected override void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+        protected override void EnableFeature(NServiceBus.Settings.SettingsHolder settings) { }
     }
     public interface IClaimCheckProperty
     {
@@ -98,11 +98,8 @@ namespace NServiceBus
 }
 namespace NServiceBus.Features
 {
-    [System.Obsolete("The ClaimCheck feature should not be referenced explicitly. Will be removed in ve" +
-        "rsion 3.0.0.", true)]
     public sealed class ClaimCheck : NServiceBus.Features.Feature
     {
-        public ClaimCheck() { }
         protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
     }
 }
