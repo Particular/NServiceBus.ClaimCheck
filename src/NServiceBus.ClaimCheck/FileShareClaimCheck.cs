@@ -1,6 +1,7 @@
 namespace NServiceBus;
 
 using ClaimCheck;
+using Features;
 using Microsoft.Extensions.DependencyInjection;
 using Settings;
 
@@ -9,21 +10,27 @@ using Settings;
 /// </summary>
 public class FileShareClaimCheck : ClaimCheckDefinition
 {
-    internal string BasePath { get; set; }
+    internal string BasePath;
 
     /// <inheritdoc />
-    protected internal override void Configure(IReadOnlySettings settings, IServiceCollection services)
+    protected internal override void EnableFeature(SettingsHolder settings) => settings.EnableFeature<FileShareClaimCheckFeature>();
+
+    class FileShareClaimCheckFeature : Feature
     {
-        if (string.IsNullOrEmpty(BasePath))
+        protected override void Setup(FeatureConfigurationContext context)
         {
-            throw new InvalidOperationException("Specify the basepath for FileShareClaimCheck, eg endpointConfiguration.UseClaimCheck<FileShareClaimCheck>().BasePath(\"c:\\claimcheck\")");
+            var basePath = context.Settings.Get<FileShareClaimCheck>().BasePath;
+            if (string.IsNullOrWhiteSpace(basePath))
+            {
+                throw new InvalidOperationException("Specify the basepath for FileShareClaimCheck, eg endpointConfiguration.UseClaimCheck<FileShareClaimCheck>().BasePath(\"c:\\claimcheck\")");
+            }
+
+            context.Services.AddSingleton<IClaimCheck>(new FileShareClaimCheckImplementation(basePath));
+
+            context.Settings.AddStartupDiagnosticsSection("FileShareClaimCheck", new
+            {
+                basePath
+            });
         }
-
-        services.AddSingleton<IClaimCheck>(new FileShareClaimCheckImplementation(BasePath));
-
-        settings.AddStartupDiagnosticsSection("FileShareClaimCheck", new
-        {
-            BasePath
-        });
     }
 }

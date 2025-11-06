@@ -21,9 +21,6 @@ sealed class ClaimCheckFeature : Feature
         var serializer = context.Settings.Get<IClaimCheckSerializer>();
         var additionalDeserializers = context.Settings.Get<List<IClaimCheckSerializer>>();
         var conventions = context.Settings.Get<ClaimCheckConventions>();
-        var definition = context.Settings.Get<ClaimCheckDefinition>();
-
-        definition.Configure(context.Settings, context.Services);
 
         context.RegisterStartupTask(b => new ClaimCheckInitializer(b.GetRequiredService<IClaimCheck>()));
         context.Pipeline.Register(new ClaimCheckSendBehavior.Registration(conventions, serializer));

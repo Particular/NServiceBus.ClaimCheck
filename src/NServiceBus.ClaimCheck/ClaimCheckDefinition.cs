@@ -1,6 +1,5 @@
 ﻿namespace NServiceBus.ClaimCheck;
 
-using Microsoft.Extensions.DependencyInjection;
 using Settings;
 
 /// <summary>
@@ -9,9 +8,7 @@ using Settings;
 public abstract class ClaimCheckDefinition
 {
     /// <summary>
-    /// Called when the claim check implementation should perform its configuration.
+    /// Called when the claim check implementation should enable its feature.
     /// </summary>
-    /// <param name="settings">The endpoint settings.</param>
-    /// <param name="services">The service collection to register in.</param>
-    protected internal abstract void Configure(IReadOnlySettings settings, IServiceCollection services);
+    protected internal abstract void EnableFeature(SettingsHolder settings);
 }
