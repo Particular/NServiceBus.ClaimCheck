@@ -19,8 +19,9 @@ public class FileShareClaimCheck : ClaimCheckDefinition
     {
         public FileShareClaimCheckFeature()
         {
-            DependsOn<Features.ClaimCheck>();
             EnableByDefault<Features.ClaimCheck>();
+
+            DependsOn<Features.ClaimCheck>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)

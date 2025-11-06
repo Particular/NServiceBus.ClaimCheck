@@ -18,9 +18,11 @@ class CustomClaimCheck(Func<IServiceProvider, IClaimCheck> claimCheckFactory) : 
     {
         public CustomClaimCheckFeature()
         {
-            DependsOn<Features.ClaimCheck>();
             EnableByDefault<Features.ClaimCheck>();
+
+            DependsOn<Features.ClaimCheck>();
         }
+
         protected override void Setup(FeatureConfigurationContext context) => context.Services.AddSingleton(context.Settings.Get<Func<IServiceProvider, IClaimCheck>>());
     }
 }
