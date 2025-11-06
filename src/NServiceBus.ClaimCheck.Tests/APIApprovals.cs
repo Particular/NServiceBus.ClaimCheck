@@ -10,7 +10,7 @@ public class APIApprovals
     [Test]
     public void ApproveClaimCheck()
     {
-        var publicApi = typeof(ClaimCheckFeature).Assembly.GeneratePublicApi(new ApiGeneratorOptions
+        var publicApi = typeof(IClaimCheck).Assembly.GeneratePublicApi(new ApiGeneratorOptions
         {
             ExcludeAttributes = ["System.Runtime.Versioning.TargetFrameworkAttribute", "System.Reflection.AssemblyMetadataAttribute"]
         });

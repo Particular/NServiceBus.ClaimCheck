@@ -17,6 +17,12 @@ public class FileShareClaimCheck : ClaimCheckDefinition
 
     class FileShareClaimCheckFeature : Feature
     {
+        public FileShareClaimCheckFeature()
+        {
+            DependsOn<Features.ClaimCheck>();
+            EnableByDefault<Features.ClaimCheck>();
+        }
+
         protected override void Setup(FeatureConfigurationContext context)
         {
             var basePath = context.Settings.Get<FileShareClaimCheck>().BasePath;

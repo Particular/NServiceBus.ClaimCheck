@@ -68,6 +68,5 @@ public static class UseClaimCheckExtensions
         _ = settings.GetOrCreate<ClaimCheckConventions>();
 
         selectedClaimCheck.EnableFeature(settings);
-        config.EnableFeature<ClaimCheckFeature>();
     }
 }

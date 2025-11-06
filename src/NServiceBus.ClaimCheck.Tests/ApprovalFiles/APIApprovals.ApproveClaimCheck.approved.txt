@@ -98,8 +98,6 @@ namespace NServiceBus
 }
 namespace NServiceBus.Features
 {
-    [System.Obsolete("The ClaimCheck feature should not be referenced explicitly. Will be removed in ve" +
-        "rsion 3.0.0.", true)]
     public sealed class ClaimCheck : NServiceBus.Features.Feature
     {
         public ClaimCheck() { }
