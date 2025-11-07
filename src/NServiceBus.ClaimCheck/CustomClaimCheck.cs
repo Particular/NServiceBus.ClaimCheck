@@ -16,7 +16,7 @@ class CustomClaimCheck(Func<IServiceProvider, IClaimCheck> claimCheckFactory) : 
 
     class CustomClaimCheckFeature : Feature
     {
-        internal CustomClaimCheckFeature()
+        public CustomClaimCheckFeature()
         {
             Enable<Features.ClaimCheck>();
 

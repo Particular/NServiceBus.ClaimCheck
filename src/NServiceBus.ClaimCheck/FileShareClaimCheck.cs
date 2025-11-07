@@ -17,7 +17,7 @@ public class FileShareClaimCheck : ClaimCheckDefinition
 
     class FileShareClaimCheckFeature : Feature
     {
-        internal FileShareClaimCheckFeature()
+        public FileShareClaimCheckFeature()
         {
             Enable<Features.ClaimCheck>();
 

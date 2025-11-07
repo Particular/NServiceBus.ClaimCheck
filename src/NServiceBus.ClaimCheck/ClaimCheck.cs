@@ -13,6 +13,9 @@ using NServiceBus.ClaimCheck;
 /// </summary>
 public sealed class ClaimCheck : Feature
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public ClaimCheck() { }
 
     /// <inheritdoc />
