@@ -13,7 +13,10 @@ using NServiceBus.ClaimCheck;
 /// </summary>
 public sealed class ClaimCheck : Feature
 {
-    internal ClaimCheck() { }
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    public ClaimCheck() { }
 
     /// <inheritdoc />
     protected override void Setup(FeatureConfigurationContext context)

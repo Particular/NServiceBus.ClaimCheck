@@ -100,6 +100,7 @@ namespace NServiceBus.Features
 {
     public sealed class ClaimCheck : NServiceBus.Features.Feature
     {
+        public ClaimCheck() { }
         protected override void Setup(NServiceBus.Features.FeatureConfigurationContext context) { }
     }
 }

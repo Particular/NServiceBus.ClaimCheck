@@ -19,7 +19,7 @@ public class FileShareClaimCheck : ClaimCheckDefinition
     {
         public FileShareClaimCheckFeature()
         {
-            EnableByDefault<Features.ClaimCheck>();
+            Enable<Features.ClaimCheck>();
 
             DependsOn<Features.ClaimCheck>();
         }
