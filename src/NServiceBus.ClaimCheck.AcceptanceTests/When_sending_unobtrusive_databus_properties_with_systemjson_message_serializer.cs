@@ -48,7 +48,7 @@ public class When_sending_unobtrusive_databus_properties_with_systemjson_message
                 builder.UseClaimCheck<FileShareClaimCheck, SystemJsonClaimCheckSerializer>().BasePath(basePath);
                 builder.UseSerialization<SystemJsonSerializer>();
                 builder.ConfigureRouting().RouteToEndpoint(typeof(MyMessageWithLargePayload), typeof(Receiver));
-            }).ExcludeType<MyMessageWithLargePayload>(); // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
+            });
     }
 
     public class Receiver : EndpointConfigurationBuilder
@@ -83,6 +83,7 @@ public class When_sending_unobtrusive_databus_properties_with_systemjson_message
                 {
                     throw new Exception("The message body is too large, which means the DataBus was not used to transfer the payload.");
                 }
+
                 return Task.CompletedTask;
             }
         }
