@@ -25,18 +25,18 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@v10.0.0-fake
         with:
           fetch-depth: 0
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v6.0.0
+        uses: actions/setup-dotnet@v10.0.0-fake
         with:
           global-json-file: global.json            
       - name: Build
         run: dotnet build src --configuration Release
       - name: Upload packages
         if: matrix.name == 'Windows'
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v10.0.0-fake
         with:
           name: NuGet packages
           path: nugets/
